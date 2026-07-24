@@ -132,9 +132,10 @@ function ContactPage() {
                   <textarea
                     name="message"
                     rows={5}
-                    className="mt-1.5 w-full rounded-2xl border border-border bg-white/70 backdrop-blur px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange"
+                    className="form-field mt-1.5"
                     placeholder="Tell us about your site and what you'd like to achieve."
                   />
+
                 </div>
                 <button
                   type="submit"
@@ -173,8 +174,9 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="mt-1.5 w-full rounded-2xl border border-border bg-white/70 backdrop-blur px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange"
+        className="form-field mt-1.5"
       />
+
     </div>
   );
 }

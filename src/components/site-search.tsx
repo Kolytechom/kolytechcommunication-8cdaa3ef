@@ -111,9 +111,10 @@ export function SiteSearch() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search services, pages, FAQs…"
-                className="flex-1 bg-transparent py-4 text-sm outline-none placeholder:text-muted-foreground"
+                className="flex-1 bg-transparent py-4 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 aria-label="Search"
               />
+
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close search"
