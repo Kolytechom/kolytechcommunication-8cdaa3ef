@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Sparkles, Phone, Search, PenTool, Wrench, LifeBuoy, Plus, Minus } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import heroImg from "@/assets/hero-globe.jpg";
 import infraImg from "@/assets/service-infra.jpg";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard, SectionHeading } from "@/components/marketing";
 import { FeaturedCarousel } from "@/components/carousel";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { services, capabilities } from "@/lib/services-data";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
