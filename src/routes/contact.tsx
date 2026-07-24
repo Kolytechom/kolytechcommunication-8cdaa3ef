@@ -114,7 +114,7 @@ function ContactPage() {
                     </label>
                     <select
                       name="interest"
-                      className="mt-1.5 w-full rounded-2xl border border-border bg-white/70 backdrop-blur px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange"
+                      className="form-field mt-1.5"
                     >
                       <option>Enterprise IT</option>
                       <option>CCTV & Security</option>
@@ -122,6 +122,7 @@ function ContactPage() {
                       <option>Healthcare IT</option>
                       <option>Cloud & Consulting</option>
                     </select>
+
                   </div>
                 </div>
                 <div>
