@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Sparkles, Phone, Search, PenTool, Wrench, LifeBuoy, Plus, Minus } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import heroImg from "@/assets/hero-globe.jpg";
 import infraImg from "@/assets/service-infra.jpg";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard, SectionHeading } from "@/components/marketing";
 import { FeaturedCarousel } from "@/components/carousel";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { services, capabilities } from "@/lib/services-data";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
@@ -33,25 +34,24 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  useScrollReveal();
   return (
     <div className="min-h-screen bg-background">
       <SiteNav />
       <Hero />
       <Marquee />
-      <div className="reveal"><About /></div>
-      <div className="reveal"><ServicesGrid /></div>
-      <div className="reveal"><FeaturedCarousel /></div>
-      <div className="reveal"><FeatureSplit /></div>
-      <div className="reveal"><Process /></div>
-      <div className="reveal"><AnimatedStats /></div>
-      <div className="reveal"><Portfolio /></div>
-      <div className="reveal"><TechPartners /></div>
-      <div className="reveal"><Industries /></div>
-      <div className="reveal"><Testimonials /></div>
-      <div className="reveal"><FAQ /></div>
-      <div className="reveal"><Stats /></div>
-      <div className="reveal"><CTA /></div>
+      <Reveal><About /></Reveal>
+      <Reveal><ServicesGrid /></Reveal>
+      <Reveal><FeaturedCarousel /></Reveal>
+      <Reveal><FeatureSplit /></Reveal>
+      <Reveal><Process /></Reveal>
+      <Reveal><AnimatedStats /></Reveal>
+      <Reveal><Portfolio /></Reveal>
+      <Reveal><TechPartners /></Reveal>
+      <Reveal><Industries /></Reveal>
+      <Reveal><Testimonials /></Reveal>
+      <Reveal><FAQ /></Reveal>
+      <Reveal><Stats /></Reveal>
+      <Reveal><CTA /></Reveal>
       <SiteFooter />
     </div>
   );
@@ -59,6 +59,15 @@ function Home() {
 
 
 function Hero() {
+  const reduce = useReducedMotion();
+  const parent = {
+    hidden: {},
+    show: { transition: { staggerChildren: reduce ? 0 : 0.09, delayChildren: 0.05 } },
+  };
+  const item = {
+    hidden: { opacity: 0, y: reduce ? 0 : 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
+  };
   return (
     <section className="relative overflow-hidden bg-hero pt-32 pb-24 sm:pt-40 sm:pb-32">
       <div className="absolute inset-0" aria-hidden>
@@ -68,41 +77,41 @@ function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="grid gap-12 md:grid-cols-[1.1fr_1fr] md:items-center">
-          <div className="text-foreground">
-            <span className="pill glass text-primary">
+          <motion.div className="text-foreground" initial="hidden" animate="show" variants={parent}>
+            <motion.span variants={item} className="pill glass text-primary">
               <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
               ICT · CCTV · Solar · Healthcare IT
-            </span>
-            <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-black leading-[0.92] tracking-tight text-primary">
+            </motion.span>
+            <motion.h1 variants={item} className="mt-6 text-5xl sm:text-6xl md:text-7xl font-black leading-[0.92] tracking-tight text-primary">
               Powering
               <br />
               <span className="gradient-text-brand">infrastructure.</span>
               <br />
               Securing systems.
-            </h1>
-            <p className="mt-6 max-w-lg text-lg text-muted-foreground leading-relaxed">
+            </motion.h1>
+            <motion.p variants={item} className="mt-6 max-w-lg text-lg text-muted-foreground leading-relaxed">
               KolyTech Communications is a technology-driven company delivering
               enterprise-grade IT infrastructure, network solutions, intelligent
               power systems and modern security — built to keep organizations
               connected, optimized and future-ready.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            </motion.p>
+            <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white hover:scale-[1.03] transition-transform"
+                className="btn-press inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white"
               >
                 Book a free consultation
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/services"
-                className="inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-semibold text-primary hover:bg-white transition-colors"
+                className="btn-press inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-semibold text-primary hover:bg-white"
               >
                 Explore services
               </Link>
-            </div>
+            </motion.div>
 
-            <dl className="mt-10 grid grid-cols-3 gap-4 max-w-md">
+            <motion.dl variants={item} className="mt-10 grid grid-cols-3 gap-4 max-w-md">
               {[
                 { k: "10+", v: "Years experience" },
                 { k: "24/7", v: "Support" },
@@ -113,16 +122,21 @@ function Hero() {
                   <dd className="text-[11px] text-muted-foreground mt-1">{s.v}</dd>
                 </div>
               ))}
-            </dl>
-          </div>
+            </motion.dl>
+          </motion.div>
 
-          <div className="relative">
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, scale: reduce ? 1 : 1.03 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          >
             <div className="absolute -inset-6 rounded-[3rem] bg-brand-orange/10 blur-3xl" aria-hidden />
             <div className="relative animate-floaty">
               <div className="glass rounded-[2.5rem] p-3 shadow-glow-blue">
                 <img
                   src={heroImg}
-                  alt="Nigerian IT engineer working in a modern server room"
+                  alt="Nigerian IT engineer in a modern Lagos server room"
                   className="w-full rounded-[2rem]"
                   width={1600}
                   height={1200}
@@ -135,7 +149,7 @@ function Hero() {
                 Cloud · Solar · Security
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -202,36 +216,42 @@ function ServicesGrid() {
           description="A full-stack technology company covering everything from cabling and cameras to cloud and clinical IT."
         />
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerGroup className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => {
             const Icon = s.icon;
             return (
-              <Link
+              <StaggerItem
                 key={s.slug}
-                to={
-                  s.slug === "solar" ? "/solar" :
-                  s.slug === "cctv" ? "/cctv" :
-                  s.slug === "healthcare" ? "/healthcare" : "/services"
-                }
-                className="group glass rounded-3xl p-6 relative overflow-hidden hover:-translate-y-1 transition-transform"
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-orange/5 blur-3xl group-hover:bg-brand-orange/15 transition-colors" />
-                <div className="relative">
-                  <div className="h-12 w-12 rounded-2xl bg-brand-gradient grid place-items-center">
-                    <Icon className="h-5 w-5 text-white" />
+                <Link
+                  to={
+                    s.slug === "solar" ? "/solar" :
+                    s.slug === "cctv" ? "/cctv" :
+                    s.slug === "healthcare" ? "/healthcare" : "/services"
+                  }
+                  className="group glass rounded-3xl p-6 relative overflow-hidden block hover:shadow-glow-blue transition-shadow duration-300"
+                >
+                  <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-orange/5 blur-3xl group-hover:bg-brand-orange/15 transition-colors duration-500" />
+                  <div className="relative">
+                    <div className="h-12 w-12 rounded-2xl bg-brand-gradient grid place-items-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <Icon className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="mt-5 text-lg font-bold text-primary">{s.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {s.short}
+                    </p>
+                    <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-orange">
+                      <span className="transition-transform duration-300 group-hover:-translate-x-0.5">Learn more</span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                    </div>
                   </div>
-                  <h3 className="mt-5 text-lg font-bold text-primary">{s.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                    {s.short}
-                  </p>
-                  <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-orange">
-                    Learn more <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGroup>
       </div>
     </section>
   );
@@ -419,15 +439,32 @@ function FAQ() {
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="font-semibold text-primary">{f.q}</div>
-                  {isOpen ? (
-                    <Minus className="h-4 w-4 text-brand-orange shrink-0" />
-                  ) : (
-                    <Plus className="h-4 w-4 text-brand-orange shrink-0" />
-                  )}
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className="shrink-0"
+                  >
+                    {isOpen ? (
+                      <Minus className="h-4 w-4 text-brand-orange" />
+                    ) : (
+                      <Plus className="h-4 w-4 text-brand-orange" />
+                    )}
+                  </motion.div>
                 </div>
-                {isOpen && (
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
-                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             );
           })}

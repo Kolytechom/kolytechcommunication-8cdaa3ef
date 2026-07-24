@@ -237,3 +237,23 @@
 
 .tilt-card { transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s ease; }
 .tilt-card:hover { transform: translateY(-8px) rotate(-.4deg); }
+
+/* Unified button press micro-interaction */
+.btn-press { transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .3s cubic-bezier(.22,1,.36,1), background-color .2s ease; will-change: transform; }
+.btn-press:hover { transform: translateY(-1px) scale(1.02); }
+.btn-press:active { transform: translateY(0) scale(0.98); transition-duration: .1s; }
+
+/* Fade-in for lazy images once loaded */
+.img-fade { opacity: 0; transition: opacity .5s cubic-bezier(.22,1,.36,1); }
+.img-fade[data-loaded="true"] { opacity: 1; }
+
+/* Respect prefers-reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-floaty, .animate-marquee { animation: none !important; }
+}

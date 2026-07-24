@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SectionHeading } from "@/components/marketing";
 import cctvImg from "@/assets/service-cctv.jpg";
 import solarImg from "@/assets/service-solar.jpg";
@@ -78,6 +79,8 @@ const CATEGORIES = [
 
 export function Portfolio() {
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
+  const reduce = useReducedMotion();
+  void reduce;
   const items = useMemo(
     () => (filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter)),
     [filter]
@@ -112,43 +115,51 @@ export function Portfolio() {
           })}
         </div>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((p) => (
-            <article
-              key={p.title}
-              className="group glass rounded-3xl overflow-hidden animate-rise transition-transform hover:-translate-y-1"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                />
-                <span className="absolute left-3 top-3 pill bg-card/90 text-primary text-[11px]">
-                  {p.category}
-                </span>
-              </div>
-              <div className="p-5">
-                <h3 className="font-bold text-primary">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                  {p.description}
-                </p>
-                <button
-                  type="button"
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-orange"
-                >
-                  View details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </div>
-            </article>
-          ))}
+        <motion.div layout className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {items.map((p) => (
+              <motion.article
+                key={p.title}
+                layout
+                initial={{ opacity: 0, scale: 0.94, y: 12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -4 }}
+                className="group glass rounded-3xl overflow-hidden"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                  />
+                  <span className="absolute left-3 top-3 pill bg-card/90 text-primary text-[11px]">
+                    {p.category}
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold text-primary">{p.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {p.description}
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-orange"
+                  >
+                    View details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
           {items.length === 0 && (
             <div className="col-span-full text-center text-sm text-muted-foreground py-10">
               No projects in this category yet.
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

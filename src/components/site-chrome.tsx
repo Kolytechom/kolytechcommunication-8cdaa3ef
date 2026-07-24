@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Mail, Phone, MapPin, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import logoImg from "@/assets/kolytech-logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SiteSearch } from "@/components/site-search";
@@ -73,7 +74,7 @@ export function SiteNav() {
           <div className="flex items-center gap-2">
             <Link
               to="/contact"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-orange hover:scale-[1.03] transition-transform"
+              className="btn-press hidden sm:inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-orange"
             >
               Get a quote
             </Link>
@@ -90,18 +91,32 @@ export function SiteNav() {
         </div>
 
         {open && (
-          <div className="lg:hidden mt-2 grid gap-1 border-t border-border pt-2">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="px-3 py-2 rounded-2xl text-sm font-medium hover:bg-secondary"
-              
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+          <AnimatePresence>
+            <motion.div
+              key="mobile-menu"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:hidden mt-2 grid gap-1 border-t border-border pt-2 overflow-hidden"
+            >
+              {nav.map((item, i) => (
+                <motion.div
+                  key={item.to}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25, delay: 0.03 * i, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    to={item.to}
+                    className="block px-3 py-2 rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         )}
       </div>
     </header>
