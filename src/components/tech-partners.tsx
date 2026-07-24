@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/marketing";
+import { staggerParent, fadeUp, viewportOnce } from "@/lib/motion";
 
 const partners = [
   "Microsoft",
@@ -24,19 +26,28 @@ export function TechPartners() {
           description="Vendor-neutral by design — we deploy and support technology from the platforms our clients trust."
         />
 
-        <div className="mt-12 hidden md:grid grid-cols-3 lg:grid-cols-9 gap-3">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerParent(0.05)}
+          className="mt-12 hidden md:grid grid-cols-3 lg:grid-cols-9 gap-3"
+        >
           {partners.map((p) => (
-            <div
+            <motion.div
               key={p}
+              variants={fadeUp}
+              whileHover={{ scale: 1.05, y: -2 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               title={p}
-              className="group glass rounded-2xl px-4 py-5 text-center transition-all hover:-translate-y-1 hover:shadow-glow-blue"
+              className="group glass rounded-2xl px-4 py-5 text-center hover:shadow-glow-blue"
             >
-              <span className="block text-sm font-bold tracking-wide text-muted-foreground grayscale group-hover:grayscale-0 group-hover:text-brand-orange transition-colors">
+              <span className="block text-sm font-bold tracking-wide text-muted-foreground grayscale group-hover:grayscale-0 group-hover:text-brand-orange transition-colors duration-300">
                 {p}
               </span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <div className="md:hidden mt-10 overflow-hidden">
           <div className="flex gap-3 animate-marquee w-max">
@@ -54,3 +65,4 @@ export function TechPartners() {
     </section>
   );
 }
+
