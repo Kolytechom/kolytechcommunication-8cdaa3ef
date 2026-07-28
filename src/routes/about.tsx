@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "KolyTech Communications is a technology-driven company delivering enterprise-grade IT, network solutions and intelligent power systems.",
+          "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering enterprise-grade infrastructure, network & security, AI, automation and software development.",
       },
       { property: "og:title", content: "About KolyTech" },
       { property: "og:description", content: "Powering Infrastructure. Securing Systems. Driving Innovation." },
@@ -21,12 +21,12 @@ export const Route = createFileRoute("/about")({
 });
 
 const values = [
-  "Enterprise-grade IT infrastructure",
-  "Network solutions & structured cabling",
-  "Intelligent power & solar systems",
-  "Scalable, secure and efficient environments",
-  "Support across every department",
-  "Documented, auditable and compliant delivery",
+  "IT Infrastructure & network administration",
+  "Network & security solutions",
+  "AI solutions, chatbots & assistants",
+  "Business & workflow automation",
+  "Custom software, SaaS, web & mobile development",
+  "Digital innovation & transformation",
 ];
 
 function AboutPage() {
@@ -35,9 +35,9 @@ function AboutPage() {
       <SiteNav />
       <PageHero
         eyebrow="About KolyTech"
-        title="Technology-driven,"
-        accent="mission-focused."
-        subtitle="KolyTech Communications is a technology company delivering enterprise-grade IT infrastructure, network solutions and intelligent power systems — helping organizations stay connected, optimized and future-ready."
+        title="IT Infrastructure, AI &"
+        accent="Digital Solutions."
+        subtitle="KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company — delivering enterprise-grade infrastructure, network & security, AI, business automation and software development to help organizations stay connected, intelligent and future-ready."
         image={infraImg}
         imageAlt="Enterprise infrastructure"
         tone="mixed"

@@ -117,10 +117,10 @@ function ContactPage() {
                       className="form-field mt-1.5"
                     >
                       <option>Enterprise IT</option>
+                      <option>AI Solutions & Digital Innovation</option>
                       <option>CCTV & Security</option>
                       <option>Solar Installation</option>
                       <option>Healthcare IT</option>
-                      <option>Cloud & Consulting</option>
                     </select>
 
                   </div>

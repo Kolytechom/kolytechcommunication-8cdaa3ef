@@ -5,12 +5,13 @@ import {
   Sun,
   Camera,
   HeartPulse,
-  Cloud,
+  Brain,
   Wrench,
   Cpu,
   Database,
   Lock,
   Monitor,
+  Sparkles,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -20,6 +21,11 @@ export type Service = {
   short: string;
   icon: LucideIcon;
   bullets: string[];
+};
+
+export type ServiceCategory = {
+  title: string;
+  items: string[];
 };
 
 export const services: Service[] = [
@@ -47,6 +53,21 @@ export const services: Service[] = [
       "Hardware procurement, installation & lifecycle management",
       "Preventive & corrective system maintenance",
       "IT policy development, documentation & compliance",
+    ],
+  },
+  {
+    slug: "ai",
+    title: "AI Solutions & Digital Innovation",
+    short:
+      "Practical AI, automation and software that streamline operations and accelerate growth.",
+    icon: Brain,
+    bullets: [
+      "AI strategy, consulting & readiness assessment",
+      "Business & workflow automation",
+      "AI chatbots and intelligent assistants",
+      "Custom software, SaaS, web & mobile development",
+      "UI/UX, branding & digital design",
+      "AI commercial video production & digital transformation",
     ],
   },
   {
@@ -87,17 +108,39 @@ export const services: Service[] = [
       "24/7 IT support & maintenance",
     ],
   },
+];
+
+export const aiCategories: ServiceCategory[] = [
   {
-    slug: "cloud",
-    title: "Cloud & Specialized Solutions",
-    short: "Cloud computing, Azure resource management and technical leadership.",
-    icon: Cloud,
-    bullets: [
-      "Cloud computing with Microsoft Azure resource management",
-      "IT policy development & technical leadership",
-      "Custom deployment for regulated industries",
-      "Digital transformation advisory",
+    title: "Artificial Intelligence",
+    items: ["Artificial Intelligence", "AI Strategy & Consulting", "AI Readiness Assessment"],
+  },
+  {
+    title: "AI Solutions & Automation",
+    items: [
+      "AI Solutions",
+      "Business Automation",
+      "Workflow Automation",
+      "AI Chatbots",
+      "AI Assistants",
     ],
+  },
+  {
+    title: "Software & Digital Products",
+    items: [
+      "Custom Software Development",
+      "SaaS Development",
+      "Website Development",
+      "Mobile Application Development",
+    ],
+  },
+  {
+    title: "Design & Digital Experience",
+    items: ["UI/UX Design", "Branding & Digital Design"],
+  },
+  {
+    title: "AI Media & Business Transformation",
+    items: ["AI Commercial Video Production", "Digital Transformation"],
   },
 ];
 
@@ -109,5 +152,5 @@ export const capabilities = [
   { icon: Sun, label: "Solar" },
   { icon: Lock, label: "Compliance" },
   { icon: Monitor, label: "Support" },
-  { icon: Cloud, label: "Cloud" },
+  { icon: Sparkles, label: "AI & Automation" },
 ];
