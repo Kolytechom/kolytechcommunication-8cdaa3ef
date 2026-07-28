@@ -514,8 +514,9 @@ function CTA() {
                 <span className="gradient-text-brand">clean, reliable technology.</span>
               </h2>
               <p className="mt-4 text-muted-foreground max-w-lg">
-                Free consultation and site assessment for enterprise IT, CCTV, healthcare
-                IT and solar installations.
+                Free consultation and professional assessment for IT Infrastructure,
+                AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
+                Development, and Solar Power Solutions.
               </p>
             </div>
             <div className="flex flex-col gap-3">
