@@ -127,7 +127,7 @@ export function SiteSearch() {
             <div className="max-h-[60vh] overflow-y-auto">
               {q.trim() === "" && (
                 <div className="p-6 text-sm text-muted-foreground">
-                  Try “solar”, “CCTV”, “EMR” or “networking”.
+                  Try “AI”, “automation”, “software”, “solar”, “CCTV” or “EMR”.
                 </div>
               )}
               {q.trim() !== "" && results.length === 0 && (
