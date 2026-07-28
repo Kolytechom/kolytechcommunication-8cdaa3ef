@@ -16,17 +16,17 @@ import { TechPartners } from "@/components/tech-partners";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "KolyTech Communications — ICT, CCTV, Solar & Healthcare IT" },
+      { title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
       {
         name: "description",
         content:
-          "KolyTech Communications delivers enterprise-grade IT infrastructure, CCTV, hardware, software, cloud and solar power installations across Nigeria.",
+          "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
       },
-      { property: "og:title", content: "KolyTech Communications — ICT, CCTV, Solar & Healthcare IT" },
+      { property: "og:title", content: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
       {
         property: "og:description",
         content:
-          "KolyTech Communications delivers enterprise-grade IT infrastructure, CCTV, hardware, software, cloud and solar power installations across Nigeria.",
+          "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
       },
     ],
   }),
@@ -80,7 +80,7 @@ function Hero() {
           <motion.div className="text-foreground" initial="hidden" animate="show" variants={parent}>
             <motion.span variants={item} className="pill glass text-primary">
               <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
-              ICT · CCTV · Solar · Healthcare IT
+              IT Infrastructure · AI · Digital Solutions
             </motion.span>
             <motion.h1 variants={item} className="mt-6 text-5xl sm:text-6xl md:text-7xl font-black leading-[0.92] tracking-tight text-primary">
               Powering
@@ -90,10 +90,10 @@ function Hero() {
               Securing systems.
             </motion.h1>
             <motion.p variants={item} className="mt-6 max-w-lg text-lg text-muted-foreground leading-relaxed">
-              KolyTech Communications is a technology-driven company delivering
-              enterprise-grade IT infrastructure, network solutions, intelligent
-              power systems and modern security — built to keep organizations
-              connected, optimized and future-ready.
+              KolyTech Communications is an IT Infrastructure, AI & Digital Solutions
+              company — delivering enterprise-grade infrastructure, network & security,
+              AI, business automation and software development to keep organizations
+              connected, intelligent and future-ready.
             </motion.p>
             <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -146,7 +146,7 @@ function Hero() {
                 Enterprise-grade
               </div>
               <div className="glass absolute -right-3 bottom-10 rounded-2xl px-3 py-2 text-xs font-semibold text-primary hidden sm:block">
-                Cloud · Solar · Security
+                AI · Automation · Security
               </div>
             </div>
           </motion.div>
@@ -157,7 +157,7 @@ function Hero() {
 }
 
 function Marquee() {
-  const items = ["ICT Services", "Enterprise IT", "Solar Systems", "CCTV & Security", "Healthcare IT", "Cloud", "Networking"];
+  const items = ["IT Infrastructure", "AI Solutions", "Automation", "Software", "CCTV & Security", "Solar Systems", "Healthcare IT"];
   return (
     <div className="relative -mt-8 mb-12">
       <div className="mx-auto max-w-6xl px-6">
@@ -213,7 +213,7 @@ function ServicesGrid() {
           eyebrow="What we do"
           title="Six practices."
           accent="One trusted partner."
-          description="A full-stack technology company covering everything from cabling and cameras to cloud and clinical IT."
+          description="IT infrastructure, AI, automation, software development, CCTV, solar and healthcare IT — delivered end-to-end."
         />
 
         <StaggerGroup className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -229,7 +229,8 @@ function ServicesGrid() {
                   to={
                     s.slug === "solar" ? "/solar" :
                     s.slug === "cctv" ? "/cctv" :
-                    s.slug === "healthcare" ? "/healthcare" : "/services"
+                    s.slug === "healthcare" ? "/healthcare" :
+                    s.slug === "ai" ? "/ai" : "/services"
                   }
                   className="group glass rounded-3xl p-6 relative overflow-hidden block hover:shadow-glow-blue transition-shadow duration-300"
                 >
@@ -286,7 +287,7 @@ function FeatureSplit() {
           </p>
           <ul className="mt-6 grid gap-3">
             {[
-              "Certified engineers across networking, virtualization & cloud",
+              "Certified engineers across networking, virtualization & AI systems",
               "Vendor-neutral procurement and lifecycle management",
               "Documented policies, compliance and audit readiness",
               "24/7 monitoring, preventive and corrective maintenance",
