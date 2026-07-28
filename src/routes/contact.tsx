@@ -37,8 +37,9 @@ function ContactPage() {
             <span className="gradient-text-brand">reliable together.</span>
           </h1>
           <p className="mt-4 max-w-xl text-muted-foreground">
-            Free consultation and site assessment for enterprise IT, CCTV, healthcare
-            IT and solar installations.
+            Free consultation and professional assessment for IT Infrastructure,
+            AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
+            Development, and Solar Power Solutions.
           </p>
         </div>
       </section>
