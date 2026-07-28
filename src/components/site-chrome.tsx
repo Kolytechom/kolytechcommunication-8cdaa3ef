@@ -9,6 +9,7 @@ import { SiteSearch } from "@/components/site-search";
 const nav = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/ai", label: "AI" },
   { to: "/solar", label: "Solar" },
   { to: "/cctv", label: "CCTV" },
   { to: "/healthcare", label: "Healthcare" },
@@ -131,9 +132,9 @@ export function SiteFooter() {
           <div className="md:col-span-2">
             <Logo />
             <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              KolyTech Communications is a technology-driven company delivering
-              enterprise-grade IT infrastructure, network solutions, and intelligent
-              power systems across Nigeria and beyond.
+              KolyTech Communications is an IT Infrastructure, AI & Digital Solutions
+              company delivering enterprise-grade infrastructure, network & security,
+              AI, business automation and software development across Nigeria and beyond.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <span className="pill glass text-primary">Powering Infrastructure</span>

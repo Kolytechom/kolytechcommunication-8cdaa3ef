@@ -6,8 +6,9 @@ import { services } from "@/lib/services-data";
 type Result = { title: string; description: string; to: string; category: string };
 
 const PAGES: Result[] = [
-  { title: "Home", description: "KolyTech Communications — ICT, CCTV, Solar & Healthcare IT.", to: "/", category: "Page" },
-  { title: "Services", description: "All practices: infrastructure, support, solar, CCTV, healthcare, cloud.", to: "/services", category: "Page" },
+  { title: "Home", description: "KolyTech — IT Infrastructure, AI & Digital Solutions.", to: "/", category: "Page" },
+  { title: "Services", description: "Infrastructure, support, AI, software, solar, CCTV and healthcare IT.", to: "/services", category: "Page" },
+  { title: "AI Solutions & Digital Innovation", description: "AI strategy, automation, chatbots, custom software, SaaS, UI/UX and digital transformation.", to: "/ai", category: "Page" },
   { title: "Solar Systems Installation", description: "Residential and commercial solar, hybrid and off-grid.", to: "/solar", category: "Page" },
   { title: "CCTV & Security Systems", description: "Smart security and complete protection for homes and business.", to: "/cctv", category: "Page" },
   { title: "Healthcare IT Solutions", description: "EMR deployment, clinical networks and data security.", to: "/healthcare", category: "Page" },

@@ -12,10 +12,10 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Full-stack services: enterprise IT infrastructure, network administration, systems support, CCTV, solar, healthcare IT, cloud and specialized solutions.",
+          "IT Infrastructure, AI & Digital Solutions: network administration, systems support, AI & automation, software development, CCTV, solar and healthcare IT.",
       },
       { property: "og:title", content: "KolyTech Services" },
-      { property: "og:description", content: "Enterprise IT, CCTV, solar, healthcare IT and cloud services." },
+      { property: "og:description", content: "IT Infrastructure, AI, automation, software, CCTV, solar and healthcare IT services." },
     ],
   }),
   component: ServicesPage,

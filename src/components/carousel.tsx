@@ -5,7 +5,7 @@ import solarImg from "@/assets/service-solar.jpg";
 import cctvImg from "@/assets/service-cctv.jpg";
 import healthImg from "@/assets/service-healthcare.jpg";
 import infraImg from "@/assets/service-infra.jpg";
-import heroImg from "@/assets/hero-globe.jpg";
+import aiImg from "@/assets/service-ai.jpg";
 
 type Slide = {
   title: string;
@@ -50,11 +50,11 @@ const slides: Slide[] = [
     accent: "from-primary/80 to-brand-blue/60",
   },
   {
-    tag: "Cloud",
-    title: "Cloud & specialized solutions.",
-    body: "Microsoft Azure resource management, digital transformation and technical leadership.",
-    img: heroImg,
-    to: "/services",
+    tag: "AI & Digital Innovation",
+    title: "AI, automation & digital innovation.",
+    body: "AI strategy, business automation, chatbots, custom software, SaaS and digital transformation.",
+    img: aiImg,
+    to: "/ai",
     accent: "from-brand-orange/70 to-brand-blue/60",
   },
 ];
