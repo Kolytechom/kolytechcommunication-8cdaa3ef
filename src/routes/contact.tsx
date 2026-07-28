@@ -11,10 +11,10 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Get in touch with KolyTech Communications for a free consultation and site assessment. Lagos, Nigeria.",
+          "Free consultation and professional assessment for IT Infrastructure, AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software Development, and Solar Power. Lagos, Nigeria.",
       },
       { property: "og:title", content: "Contact KolyTech" },
-      { property: "og:description", content: "Free consultation & site assessment." },
+      { property: "og:description", content: "Free consultation for IT Infrastructure, AI & Digital Solutions." },
     ],
   }),
   component: ContactPage,
@@ -37,8 +37,9 @@ function ContactPage() {
             <span className="gradient-text-brand">reliable together.</span>
           </h1>
           <p className="mt-4 max-w-xl text-muted-foreground">
-            Free consultation and site assessment for enterprise IT, CCTV, healthcare
-            IT and solar installations.
+            Free consultation and professional assessment for IT Infrastructure,
+            AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
+            Development, and Solar Power Solutions.
           </p>
         </div>
       </section>
