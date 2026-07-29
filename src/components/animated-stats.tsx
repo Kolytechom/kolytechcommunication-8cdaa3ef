@@ -2,6 +2,7 @@ import { useCountUp } from "@/hooks/use-count-up";
 import { Award, Briefcase, Users, ThumbsUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SectionHeading } from "@/components/marketing";
+import { YEARS_EXPERIENCE } from "@/lib/company";
 
 type Stat = { icon: LucideIcon; value: number; suffix: string; label: string };
 
