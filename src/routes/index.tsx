@@ -9,6 +9,7 @@ import { GlassCard, SectionHeading } from "@/components/marketing";
 import { FeaturedCarousel } from "@/components/carousel";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { services, capabilities } from "@/lib/services-data";
+import { YEARS_EXPERIENCE_SHORT } from "@/lib/company";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
 import { TechPartners } from "@/components/tech-partners";

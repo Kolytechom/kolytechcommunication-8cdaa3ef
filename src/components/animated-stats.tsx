@@ -7,7 +7,7 @@ import { YEARS_EXPERIENCE } from "@/lib/company";
 type Stat = { icon: LucideIcon; value: number; suffix: string; label: string };
 
 const stats: Stat[] = [
-  { icon: Award, value: 18, suffix: "+", label: "Years Experience" },
+  { icon: Award, value: YEARS_EXPERIENCE, suffix: "+", label: "Years Experience" },
   { icon: Briefcase, value: 500, suffix: "+", label: "Projects Delivered" },
   { icon: Users, value: 200, suffix: "+", label: "Satisfied Clients" },
   { icon: ThumbsUp, value: 99, suffix: "%", label: "Client Satisfaction" },
