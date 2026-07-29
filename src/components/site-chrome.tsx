@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import logoImg from "@/assets/kolytech-logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SiteSearch } from "@/components/site-search";
+import { useKolyAssist } from "@/components/kolyassist";
+import { KolyAssistMark } from "@/components/kolyassist/icon";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -73,6 +75,14 @@ export function SiteNav() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={openAssist}
+              className="btn-press hidden md:inline-flex items-center gap-2 rounded-full bg-brand-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-blue"
+            >
+              <KolyAssistMark className="h-4 w-4" />
+              KolyAssist AI
+            </button>
             <Link
               to="/contact"
               className="btn-press hidden sm:inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-orange"

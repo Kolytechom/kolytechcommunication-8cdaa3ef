@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard } from "@/components/marketing";
+import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
