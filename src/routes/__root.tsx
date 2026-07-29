@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, themeInitScript } from "../components/theme-provider";
 import { WhatsAppButton } from "../components/whatsapp-button";
 import { MobileContactBar } from "../components/mobile-contact-bar";
+import { KolyAssistProvider } from "../components/kolyassist";
 
 function NotFoundComponent() {
   return (
@@ -147,9 +148,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <PageTransition />
-        <WhatsAppButton />
-        <MobileContactBar />
+        <KolyAssistProvider>
+          <PageTransition />
+          <WhatsAppButton />
+          <MobileContactBar />
+        </KolyAssistProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

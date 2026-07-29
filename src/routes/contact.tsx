@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard } from "@/components/marketing";
+import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -41,6 +42,9 @@ function ContactPage() {
             AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
             Development, and Solar Power Solutions.
           </p>
+          <div className="mt-6">
+            <KolyAssistCTA label="✨ Talk to KolyAssist AI" />
+          </div>
         </div>
       </section>
 

@@ -10,6 +10,7 @@ import { FeaturedCarousel } from "@/components/carousel";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { services, capabilities } from "@/lib/services-data";
 import { YEARS_EXPERIENCE_SHORT } from "@/lib/company";
+import { KolyAssistCTA } from "@/components/kolyassist";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
 import { TechPartners } from "@/components/tech-partners";
@@ -104,6 +105,7 @@ function Hero() {
                 Book a free consultation
                 <ArrowRight className="h-4 w-4" />
               </Link>
+              <KolyAssistCTA variant="glass" label="✨ Talk to KolyAssist AI" />
               <Link
                 to="/services"
                 className="btn-press inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-semibold text-primary hover:bg-white"

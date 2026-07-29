@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import logoImg from "@/assets/kolytech-logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SiteSearch } from "@/components/site-search";
+import { useKolyAssist } from "@/components/kolyassist";
+import { KolyAssistMark } from "@/components/kolyassist/icon";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -33,6 +35,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { openAssist } = useKolyAssist();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -73,6 +76,14 @@ export function SiteNav() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={openAssist}
+              className="btn-press hidden md:inline-flex items-center gap-2 rounded-full bg-brand-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-blue"
+            >
+              <KolyAssistMark className="h-4 w-4" />
+              KolyAssist AI
+            </button>
             <Link
               to="/contact"
               className="btn-press hidden sm:inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-orange"
@@ -116,6 +127,20 @@ export function SiteNav() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openAssist();
+                }}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, delay: 0.03 * nav.length, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-1 flex items-center gap-2 rounded-2xl bg-brand-gradient px-3 py-2.5 text-sm font-semibold text-white"
+              >
+                <KolyAssistMark className="h-4 w-4" />
+                Talk to KolyAssist AI
+              </motion.button>
             </motion.div>
           </AnimatePresence>
         )}
@@ -125,6 +150,7 @@ export function SiteNav() {
 }
 
 export function SiteFooter() {
+  const { openAssist } = useKolyAssist();
   return (
     <footer className="relative mt-24 border-t border-border bg-background pb-20 lg:pb-0">
       <div className="mx-auto max-w-6xl px-6 pt-16 pb-8 text-foreground">
@@ -153,6 +179,16 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openAssist}
+                  className="inline-flex items-center gap-1.5 hover:text-brand-orange transition-colors"
+                >
+                  <KolyAssistMark className="h-3.5 w-3.5" />
+                  Talk to KolyAssist AI
+                </button>
+              </li>
             </ul>
           </div>
 

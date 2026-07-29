@@ -5,6 +5,7 @@ import { PageHero, GlassCard, SectionHeading } from "@/components/marketing";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { aiCategories } from "@/lib/services-data";
 import aiImg from "@/assets/service-ai.jpg";
+import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
@@ -43,12 +44,15 @@ function AIPage() {
         imageAlt="Nigerian AI engineer working with neural network visualisations"
         tone="mixed"
       >
-        <Link
-          to="/contact"
-          className="btn-press inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white shadow-glow-orange"
-        >
-          Book a free AI consultation <ArrowRight className="h-4 w-4" />
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/contact"
+            className="btn-press inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white shadow-glow-orange"
+          >
+            Book a free AI consultation <ArrowRight className="h-4 w-4" />
+          </Link>
+          <KolyAssistCTA variant="glass" label="✨ Talk to KolyAssist AI" />
+        </div>
       </PageHero>
 
       <section className="py-20">
