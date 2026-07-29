@@ -35,6 +35,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { openAssist } = useKolyAssist();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -126,6 +127,20 @@ export function SiteNav() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openAssist();
+                }}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, delay: 0.03 * nav.length, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-1 flex items-center gap-2 rounded-2xl bg-brand-gradient px-3 py-2.5 text-sm font-semibold text-white"
+              >
+                <KolyAssistMark className="h-4 w-4" />
+                Talk to KolyAssist AI
+              </motion.button>
             </motion.div>
           </AnimatePresence>
         )}
