@@ -9,6 +9,7 @@ import { GlassCard, SectionHeading } from "@/components/marketing";
 import { FeaturedCarousel } from "@/components/carousel";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { services, capabilities } from "@/lib/services-data";
+import { YEARS_EXPERIENCE_SHORT } from "@/lib/company";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
 import { TechPartners } from "@/components/tech-partners";
@@ -113,7 +114,7 @@ function Hero() {
 
             <motion.dl variants={item} className="mt-10 grid grid-cols-3 gap-4 max-w-md">
               {[
-                { k: "10+", v: "Years experience" },
+                { k: YEARS_EXPERIENCE_SHORT, v: "Years experience" },
                 { k: "24/7", v: "Support" },
                 { k: "100%", v: "Client-first" },
               ].map((s) => (
