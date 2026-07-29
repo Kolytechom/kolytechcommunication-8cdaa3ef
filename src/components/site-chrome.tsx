@@ -150,6 +150,7 @@ export function SiteNav() {
 }
 
 export function SiteFooter() {
+  const { openAssist } = useKolyAssist();
   return (
     <footer className="relative mt-24 border-t border-border bg-background pb-20 lg:pb-0">
       <div className="mx-auto max-w-6xl px-6 pt-16 pb-8 text-foreground">
@@ -178,6 +179,16 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openAssist}
+                  className="inline-flex items-center gap-1.5 hover:text-brand-orange transition-colors"
+                >
+                  <KolyAssistMark className="h-3.5 w-3.5" />
+                  Talk to KolyAssist AI
+                </button>
+              </li>
             </ul>
           </div>
 
