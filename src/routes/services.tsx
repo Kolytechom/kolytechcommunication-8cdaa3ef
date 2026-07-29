@@ -4,6 +4,7 @@ import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { PageHero, GlassCard, SectionHeading } from "@/components/marketing";
 import { services } from "@/lib/services-data";
 import infraImg from "@/assets/service-infra.jpg";
+import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -33,7 +34,9 @@ function ServicesPage() {
         image={infraImg}
         imageAlt="Enterprise infrastructure"
         tone="mixed"
-      />
+      >
+        <KolyAssistCTA label="✨ Talk to KolyAssist AI" />
+      </PageHero>
 
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-6">

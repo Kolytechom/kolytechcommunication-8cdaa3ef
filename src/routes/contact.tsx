@@ -41,6 +41,9 @@ function ContactPage() {
             AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
             Development, and Solar Power Solutions.
           </p>
+          <div className="mt-6">
+            <KolyAssistCTA label="✨ Talk to KolyAssist AI" />
+          </div>
         </div>
       </section>
 
