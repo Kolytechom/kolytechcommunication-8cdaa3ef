@@ -574,20 +574,31 @@ function SummaryRow({
 function Question({
   title,
   hint,
+  size = "lg",
   children,
 }: {
   title: string;
   hint?: string;
+  size?: "lg" | "sm";
   children: ReactNode;
 }) {
   return (
     <div>
-      <h3 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">{title}</h3>
+      <h3
+        className={
+          size === "sm"
+            ? "text-base sm:text-lg font-bold tracking-tight text-foreground"
+            : "text-xl sm:text-2xl font-black tracking-tight text-foreground"
+        }
+      >
+        {title}
+      </h3>
       {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}
       <div className="mt-4">{children}</div>
     </div>
   );
 }
+
 
 function Choice({
   label,
