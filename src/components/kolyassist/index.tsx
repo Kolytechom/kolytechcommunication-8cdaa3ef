@@ -13,22 +13,22 @@ import { ArrowLeft, ArrowRight, Check, Sparkles, X } from "lucide-react";
 import { KolyAssistMark } from "./icon";
 import {
   advisorNote,
+  buildFlow,
+  labelForNeed,
+  labelForOption,
   needOptions,
-  organisationOptions,
   recommendServices,
-  scaleOptions,
-  timelineOptions,
+  type QuestionDef,
 } from "./data";
 import { EASE } from "@/lib/motion";
 
-const STORAGE_KEY = "kolyassist_session_v1";
-const TOTAL_STEPS = 6; // 0 welcome … 5 recommendation
+const STORAGE_KEY = "kolyassist_session_v2";
+
+type Responses = Record<string, string[]>;
 
 type Answers = {
   needs: string[];
-  organisation: string;
-  scale: string;
-  timeline: string;
+  responses: Responses;
   name: string;
   email: string;
   phone: string;
@@ -37,9 +37,7 @@ type Answers = {
 
 const emptyAnswers: Answers = {
   needs: [],
-  organisation: "",
-  scale: "",
-  timeline: "",
+  responses: {},
   name: "",
   email: "",
   phone: "",
@@ -129,9 +127,10 @@ function useSession() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as { step?: number; answers?: Answers };
-        if (parsed.answers) setAnswers({ ...emptyAnswers, ...parsed.answers });
-        if (typeof parsed.step === "number") setStep(Math.min(parsed.step, TOTAL_STEPS - 1));
+        const parsed = JSON.parse(raw) as { step?: number; answers?: Partial<Answers> };
+        if (parsed.answers)
+          setAnswers({ ...emptyAnswers, ...parsed.answers, responses: parsed.answers.responses ?? {} });
+        if (typeof parsed.step === "number") setStep(Math.max(0, parsed.step));
       }
     } catch {}
     setLoaded(true);
@@ -174,21 +173,52 @@ function KolyAssistPanel() {
     };
   }, [open, closeAssist]);
 
+  /* ---------------- Adaptive flow ---------------- */
+  const flow = useMemo(() => buildFlow(answers.needs), [answers.needs]);
+  // 0 welcome · 1 needs · flow steps · contact · summary · recommendation
+  const CONTACT_STEP = 2 + flow.length;
+  const SUMMARY_STEP = CONTACT_STEP + 1;
+  const RESULT_STEP = SUMMARY_STEP + 1;
+  const totalSteps = RESULT_STEP + 1;
+  const safeStep = Math.min(step, totalSteps - 1);
+  const flowStep = safeStep >= 2 && safeStep < CONTACT_STEP ? flow[safeStep - 2] : null;
+
   const toggleNeed = (id: string) =>
     setAnswers((a) => ({
       ...a,
       needs: a.needs.includes(id) ? a.needs.filter((n) => n !== id) : [...a.needs, id],
     }));
 
-  const canContinue =
-    step === 0 ||
-    (step === 1 && answers.needs.length > 0) ||
-    (step === 2 && !!answers.organisation) ||
-    (step === 3 && !!answers.scale && !!answers.timeline) ||
-    (step === 4 && answers.name.trim().length > 1 && /\S+@\S+\.\S+/.test(answers.email)) ||
-    step === 5;
+  const pick = (qd: QuestionDef, optionId: string) =>
+    setAnswers((a) => {
+      const cur = a.responses[qd.id] ?? [];
+      const next =
+        qd.type === "multi"
+          ? cur.includes(optionId)
+            ? cur.filter((v) => v !== optionId)
+            : [...cur, optionId]
+          : [optionId];
+      return { ...a, responses: { ...a.responses, [qd.id]: next } };
+    });
 
-  const recs = recommendServices(answers.needs, answers.organisation);
+  const stepAnswered = (fs: typeof flowStep) =>
+    !fs || fs.questions.every((qd) => qd.optional || (answers.responses[qd.id] ?? []).length > 0);
+
+  const canContinue =
+    safeStep === 0 ||
+    (safeStep === 1 && answers.needs.length > 0) ||
+    (!!flowStep && stepAnswered(flowStep)) ||
+    (safeStep === CONTACT_STEP &&
+      answers.name.trim().length > 1 &&
+      /\S+@\S+\.\S+/.test(answers.email)) ||
+    safeStep >= SUMMARY_STEP;
+
+  const organisation = answers.responses.organisation?.[0] ?? "";
+  const scale = answers.responses.scale?.[0] ?? "";
+  const timeline = answers.responses.timeline?.[0] ?? "";
+  const recs = recommendServices(answers.needs, organisation);
+
+  const progress = ((safeStep + 1) / totalSteps) * 100;
 
   return (
     <AnimatePresence>
@@ -240,15 +270,15 @@ function KolyAssistPanel() {
             <div className="mt-5">
               <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 <span>
-                  Step {step + 1} of {TOTAL_STEPS}
+                  Step {safeStep + 1} of {totalSteps}
                 </span>
-                <span>{Math.round(((step + 1) / TOTAL_STEPS) * 100)}%</span>
+                <span>{Math.round(progress)}%</span>
               </div>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                 <motion.div
                   className="h-full rounded-full bg-brand-gradient"
                   initial={false}
-                  animate={{ width: `${((step + 1) / TOTAL_STEPS) * 100}%` }}
+                  animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.45, ease: EASE.out }}
                 />
               </div>
@@ -257,14 +287,14 @@ function KolyAssistPanel() {
             {/* Steps */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
-                key={step}
+                key={flowStep ? flowStep.id : safeStep}
                 initial={reduce ? { opacity: 0 } : { opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={reduce ? { opacity: 0 } : { opacity: 0, x: -16 }}
                 transition={{ duration: 0.28, ease: EASE.out }}
                 className="mt-6"
               >
-                {step === 0 && (
+                {safeStep === 0 && (
                   <div>
                     <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
                       Welcome to <span className="gradient-text-brand">KolyAssist AI</span>
@@ -277,10 +307,10 @@ function KolyAssistPanel() {
                   </div>
                 )}
 
-                {step === 1 && (
+                {safeStep === 1 && (
                   <Question
                     title="What do you need help with?"
-                    hint="Select all that apply."
+                    hint="Select all that apply — I'll only ask the questions that matter for your choices."
                   >
                     <div className="grid gap-2 sm:grid-cols-2">
                       {needOptions.map((o) => (
@@ -296,53 +326,44 @@ function KolyAssistPanel() {
                   </Question>
                 )}
 
-                {step === 2 && (
-                  <Question title="Tell me about your organisation." hint="Choose the closest match.">
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      {organisationOptions.map((o) => (
-                        <Choice
-                          key={o.id}
-                          label={o.label}
-                          selected={answers.organisation === o.id}
-                          onClick={() => setAnswers((a) => ({ ...a, organisation: o.id }))}
-                        />
-                      ))}
+                {flowStep && (
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-orange">
+                      {flowStep.heading}
+                    </p>
+                    <div className="mt-4 grid gap-6">
+                      {flowStep.questions.map((qd) => {
+                        const sel = answers.responses[qd.id] ?? [];
+                        return (
+                          <Question
+                            key={qd.id}
+                            title={qd.title}
+                            hint={qd.hint ?? (qd.type === "multi" ? "Select all that apply." : undefined)}
+                            size="sm"
+                          >
+                            <div
+                              className={`grid gap-2 ${
+                                qd.options.length > 3 ? "sm:grid-cols-2" : "sm:grid-cols-3"
+                              }`}
+                            >
+                              {qd.options.map((o) => (
+                                <Choice
+                                  key={o.id}
+                                  label={o.label}
+                                  hint={o.hint}
+                                  selected={sel.includes(o.id)}
+                                  onClick={() => pick(qd, o.id)}
+                                />
+                              ))}
+                            </div>
+                          </Question>
+                        );
+                      })}
                     </div>
-                  </Question>
+                  </div>
                 )}
 
-                {step === 3 && (
-                  <Question title="Scale and timeline." hint="This shapes the deployment plan.">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Coverage
-                    </p>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      {scaleOptions.map((o) => (
-                        <Choice
-                          key={o.id}
-                          label={o.label}
-                          selected={answers.scale === o.id}
-                          onClick={() => setAnswers((a) => ({ ...a, scale: o.id }))}
-                        />
-                      ))}
-                    </div>
-                    <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Timeline
-                    </p>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      {timelineOptions.map((o) => (
-                        <Choice
-                          key={o.id}
-                          label={o.label}
-                          selected={answers.timeline === o.id}
-                          onClick={() => setAnswers((a) => ({ ...a, timeline: o.id }))}
-                        />
-                      ))}
-                    </div>
-                  </Question>
-                )}
-
-                {step === 4 && (
+                {safeStep === CONTACT_STEP && (
                   <Question
                     title="Where should we send your recommendation?"
                     hint="A KolyTech specialist reviews every consultation."
@@ -376,14 +397,54 @@ function KolyAssistPanel() {
                   </Question>
                 )}
 
-                {step === 5 && (
+                {safeStep === SUMMARY_STEP && (
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">
+                      Review your <span className="gradient-text-brand">consultation brief.</span>
+                    </h3>
+                    <p className="mt-1.5 text-xs text-muted-foreground">
+                      Tap any answer to jump back and edit it.
+                    </p>
+
+                    <div className="mt-4 grid gap-2">
+                      <SummaryRow
+                        label="Services"
+                        value={answers.needs.map(labelForNeed).join(", ") || "—"}
+                        onEdit={() => setStep(1)}
+                      />
+                      {flow.map((fs, i) =>
+                        fs.questions.map((qd) => (
+                          <SummaryRow
+                            key={qd.id}
+                            label={qd.title}
+                            value={
+                              (answers.responses[qd.id] ?? [])
+                                .map((v) => labelForOption(qd, v))
+                                .join(", ") || "—"
+                            }
+                            onEdit={() => setStep(2 + i)}
+                          />
+                        )),
+                      )}
+                      <SummaryRow
+                        label="Contact"
+                        value={[answers.name, answers.email, answers.phone, answers.company]
+                          .filter(Boolean)
+                          .join(" · ")}
+                        onEdit={() => setStep(CONTACT_STEP)}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {safeStep === RESULT_STEP && (
                   <div>
                     <h3 className="text-2xl font-black tracking-tight text-foreground">
                       {answers.name ? `${answers.name.split(" ")[0]}, here's` : "Here's"} your{" "}
                       <span className="gradient-text-brand">recommended path.</span>
                     </h3>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                      {advisorNote(answers.organisation, answers.scale, answers.timeline)}
+                      {advisorNote(organisation, scale, timeline)}
                     </p>
                     <div className="mt-5 grid gap-3">
                       {recs.map((s, i) => {
@@ -436,8 +497,8 @@ function KolyAssistPanel() {
             <div className="mt-7 flex items-center justify-between gap-3 border-t border-border pt-4">
               <button
                 type="button"
-                onClick={() => setStep((s) => Math.max(0, s - 1))}
-                disabled={step === 0}
+                onClick={() => setStep(Math.max(0, safeStep - 1))}
+                disabled={safeStep === 0}
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40 disabled:pointer-events-none"
               >
                 <ArrowLeft className="h-4 w-4" /> Back
@@ -447,14 +508,19 @@ function KolyAssistPanel() {
                 Powered by Kolytech Communication
               </p>
 
-              {step < TOTAL_STEPS - 1 ? (
+              {safeStep < RESULT_STEP ? (
                 <button
                   type="button"
-                  onClick={() => setStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))}
+                  onClick={() => setStep(Math.min(RESULT_STEP, safeStep + 1))}
                   disabled={!canContinue}
                   className="btn-press inline-flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-blue disabled:opacity-40 disabled:pointer-events-none"
                 >
-                  {step === 0 ? "Start Consultation" : "Next"} <ArrowRight className="h-4 w-4" />
+                  {safeStep === 0
+                    ? "Start Consultation"
+                    : safeStep === SUMMARY_STEP
+                      ? "Get recommendation"
+                      : "Next"}{" "}
+                  <ArrowRight className="h-4 w-4" />
                 </button>
               ) : (
                 <button
@@ -476,25 +542,63 @@ function KolyAssistPanel() {
   );
 }
 
+function SummaryRow({
+  label,
+  value,
+  onEdit,
+}: {
+  label: string;
+  value: string;
+  onEdit: () => void;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-3.5">
+      <div className="min-w-0">
+        <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+        <p className="mt-0.5 text-sm font-semibold text-foreground break-words">{value || "—"}</p>
+      </div>
+      <button
+        type="button"
+        onClick={onEdit}
+        className="shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold text-brand-orange transition-colors hover:bg-brand-orange/10"
+      >
+        Edit
+      </button>
+    </div>
+  );
+}
+
+
 /* ------------------------------- Primitives ------------------------------- */
 
 function Question({
   title,
   hint,
+  size = "lg",
   children,
 }: {
   title: string;
   hint?: string;
+  size?: "lg" | "sm";
   children: ReactNode;
 }) {
   return (
     <div>
-      <h3 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">{title}</h3>
+      <h3
+        className={
+          size === "sm"
+            ? "text-base sm:text-lg font-bold tracking-tight text-foreground"
+            : "text-xl sm:text-2xl font-black tracking-tight text-foreground"
+        }
+      >
+        {title}
+      </h3>
       {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}
       <div className="mt-4">{children}</div>
     </div>
   );
 }
+
 
 function Choice({
   label,
