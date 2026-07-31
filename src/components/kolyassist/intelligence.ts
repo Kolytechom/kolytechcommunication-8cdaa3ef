@@ -10,8 +10,10 @@ import {
 
 export { budgetOptions, confidenceOptions, driverOptions, maturityOptions, objectiveOptions };
 
+/* -------------------------------------------------------------------------- */
 /*  Industry intelligence                                                     */
 /* -------------------------------------------------------------------------- */
+
 
 export type IndustryProfile = {
   id: string;
