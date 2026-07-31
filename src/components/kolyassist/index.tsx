@@ -24,7 +24,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { KolyAssistMark } from "./icon";
 import {
-  advisorNote,
   buildFlow,
   labelForNeed,
   labelForOption,

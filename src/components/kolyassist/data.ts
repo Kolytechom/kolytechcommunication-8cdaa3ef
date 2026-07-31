@@ -381,36 +381,5 @@ export function labelForOption(question: QuestionDef, optionId: string) {
   return question.options.find((o) => o.id === optionId)?.label ?? optionId;
 }
 
-/* ------------------------------ Recommendations ----------------------------- */
-
-const needToSlug: Record<string, string> = {
-  ai: "ai",
-  website: "ai",
-  mobile: "ai",
-  software: "ai",
-  cctv: "cctv",
-  network: "infrastructure",
-  solar: "solar",
-  healthcare: "healthcare",
-  strategy: "support",
-};
-
-export function recommendServices(needs: string[], organisation: string): Service[] {
-  const slugs = new Set(needs.map((n) => needToSlug[n]).filter(Boolean));
-  if (organisation === "healthcare") slugs.add("healthcare");
-  if (organisation === "enterprise" || organisation === "government") slugs.add("infrastructure");
-  if (slugs.size === 0) slugs.add("ai");
-  return services.filter((s) => slugs.has(s.slug)).slice(0, 4);
-}
-
-export function advisorNote(organisation: string, scale: string, timeline: string) {
-  const org =
-    organisationOptions.find((o) => o.id === organisation)?.label.toLowerCase() ??
-    "your organisation";
-  const reach = scaleOptions.find((o) => o.id === scale)?.label.toLowerCase();
-  const when = timelineOptions.find((o) => o.id === timeline)?.label.toLowerCase();
-  const parts = [`Based on ${org}`];
-  if (reach) parts.push(`operating across ${reach}`);
-  if (when) parts.push(`and a timeline of ${when}`);
-  return `${parts.join(", ")}, here is the delivery path our specialists recommend.`;
-}
+/* --------------------------- Recommendation helpers -------------------------- */
+/* The recommendation engine now lives in ./intelligence.ts — no duplicate logic here. */
