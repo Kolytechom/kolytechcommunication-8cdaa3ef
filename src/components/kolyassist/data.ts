@@ -44,10 +44,14 @@ const q = (
 
 export const organisationOptions: Option[] = [
   { id: "sme", label: "Small or medium business" },
-  { id: "enterprise", label: "Large enterprise" },
+  { id: "enterprise", label: "Large enterprise / corporate" },
   { id: "healthcare", label: "Hospital or clinic" },
   { id: "government", label: "Government or public sector" },
   { id: "education", label: "School or university" },
+  { id: "hospitality", label: "Hotel or hospitality" },
+  { id: "manufacturing", label: "Manufacturing or industrial" },
+  { id: "retail", label: "Retail or e-commerce" },
+  { id: "religious", label: "Religious organisation" },
   { id: "startup", label: "Startup or new venture" },
 ];
 
@@ -88,7 +92,40 @@ const SHARED: Record<string, QuestionDef> = {
     { id: "upgrade", label: "Upgrade or extend what we have" },
     { id: "rescue", label: "Fix an existing system" },
   ]),
+  objective: {
+    id: "objective",
+    title: "What is your primary business objective?",
+    hint: "Select all that apply.",
+    type: "multi",
+    options: objectiveOptions,
+  },
+  maturity: {
+    id: "maturity",
+    title: "How would you describe your organisation today?",
+    type: "single",
+    options: maturityOptions,
+  },
+  confidence: {
+    id: "confidence",
+    title: "How much technical guidance would you like?",
+    type: "single",
+    options: confidenceOptions,
+  },
+  driver: {
+    id: "driver",
+    title: "What is driving this project?",
+    type: "single",
+    options: driverOptions,
+  },
+  budget: {
+    id: "budget",
+    title: "Where are you with budget?",
+    type: "single",
+    optional: true,
+    options: budgetOptions,
+  },
 };
+
 
 /* ------------------------- Service-specific questions ----------------------- */
 
