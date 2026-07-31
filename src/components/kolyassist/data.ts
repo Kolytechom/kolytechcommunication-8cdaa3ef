@@ -42,6 +42,46 @@ const q = (
 
 /* ------------------------- Shared (merged) questions ------------------------ */
 
+export const objectiveOptions: Option[] = [
+  { id: "security", label: "Improve Security" },
+  { id: "productivity", label: "Increase Productivity" },
+  { id: "cost", label: "Reduce Operating Costs" },
+  { id: "modernise", label: "Modernise Infrastructure" },
+  { id: "cx", label: "Improve Customer Experience" },
+  { id: "automate", label: "Automate Business Processes" },
+  { id: "expansion", label: "Business Expansion" },
+  { id: "compliance", label: "Regulatory Compliance" },
+];
+
+export const maturityOptions: Option[] = [
+  { id: "manual", label: "Mostly Manual" },
+  { id: "partial", label: "Partially Digital" },
+  { id: "digital", label: "Mostly Digital" },
+  { id: "automated", label: "Highly Automated" },
+];
+
+export const confidenceOptions: Option[] = [
+  { id: "full", label: "Full Guidance", hint: "Explain everything in plain language" },
+  { id: "moderate", label: "Moderate Guidance", hint: "A balance of business and technical detail" },
+  { id: "technical", label: "Technical Discussion", hint: "Talk specs with our engineers" },
+];
+
+export const driverOptions: Option[] = [
+  { id: "new", label: "New Business" },
+  { id: "expansion", label: "Expansion" },
+  { id: "upgrade", label: "Upgrade Existing Systems" },
+  { id: "compliance", label: "Compliance" },
+  { id: "emergency", label: "Emergency Replacement" },
+];
+
+export const budgetOptions: Option[] = [
+  { id: "starter", label: "Starter budget" },
+  { id: "defined", label: "Budget already approved" },
+  { id: "flexible", label: "Flexible — value led" },
+  { id: "unknown", label: "Need guidance on budget" },
+];
+
+
 export const organisationOptions: Option[] = [
   { id: "sme", label: "Small or medium business" },
   { id: "enterprise", label: "Large enterprise / corporate" },
