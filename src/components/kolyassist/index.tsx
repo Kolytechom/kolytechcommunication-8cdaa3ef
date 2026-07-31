@@ -73,7 +73,7 @@ export function KolyAssistProvider({ children }: { children: ReactNode }) {
 export function KolyAssistCTA({
   className = "",
   variant = "solid",
-  label = "Talk to KolyAssist AI",
+  label = "Talk to KolyAssist",
 }: {
   className?: string;
   variant?: "solid" | "glass" | "link";
@@ -107,11 +107,11 @@ function KolyAssistLauncher() {
       transition={{ duration: 0.4, ease: EASE.out, delay: 0.6 }}
       whileHover={reduce ? undefined : { y: -2, scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      aria-label="Talk to KolyAssist AI — your intelligent business technology advisor"
+      aria-label="Talk to KolyAssist — your intelligent business technology advisor"
       className="fixed bottom-40 right-4 lg:bottom-44 lg:right-6 z-[55] flex items-center gap-2 rounded-full bg-brand-gradient px-4 py-3 text-white shadow-glow-blue"
     >
       <KolyAssistMark className="h-5 w-5" />
-      <span className="hidden sm:inline text-[13px] font-semibold">KolyAssist AI</span>
+      <span className="hidden sm:inline text-[13px] font-semibold">KolyAssist</span>
     </motion.button>
   );
 }
@@ -235,7 +235,7 @@ function KolyAssistPanel() {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="KolyAssist AI consultation"
+            aria-label="KolyAssist consultation"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.98 }}
@@ -250,7 +250,7 @@ function KolyAssistPanel() {
                   <KolyAssistMark className="h-6 w-6" />
                 </span>
                 <div>
-                  <h2 className="text-base font-bold text-primary leading-tight">KolyAssist AI</h2>
+                  <h2 className="text-base font-bold text-primary leading-tight">KolyAssist</h2>
                   <p className="text-[11px] text-muted-foreground">
                     Your Intelligent Business Technology Advisor
                   </p>
@@ -259,7 +259,7 @@ function KolyAssistPanel() {
               <button
                 type="button"
                 onClick={closeAssist}
-                aria-label="Close KolyAssist AI"
+                aria-label="Close KolyAssist"
                 className="h-9 w-9 grid place-items-center rounded-full border border-border bg-card text-foreground/70 hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
@@ -297,7 +297,7 @@ function KolyAssistPanel() {
                 {safeStep === 0 && (
                   <div>
                     <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
-                      Welcome to <span className="gradient-text-brand">KolyAssist AI</span>
+                      Welcome to <span className="gradient-text-brand">KolyAssist</span>
                     </h3>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                       Your Intelligent Business Technology Advisor. I'm here to help you identify

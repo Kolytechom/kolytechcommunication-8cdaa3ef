@@ -43,7 +43,7 @@ function ContactPage() {
             Development, and Solar Power Solutions.
           </p>
           <div className="mt-6">
-            <KolyAssistCTA label="✨ Talk to KolyAssist AI" />
+            <KolyAssistCTA label="✨ Talk to KolyAssist" />
           </div>
         </div>
       </section>
