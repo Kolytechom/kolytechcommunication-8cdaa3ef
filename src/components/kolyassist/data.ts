@@ -339,6 +339,23 @@ export function buildFlow(needs: string[]): FlowStep[] {
     });
   }
 
+  // Business intelligence profiling — asked once, whatever the service mix.
+  if (needs.length) {
+    const biIds = ["objective", "maturity", "driver", "confidence", "budget"].filter((id) => {
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+    if (biIds.length) {
+      steps.push({
+        id: "intelligence",
+        heading: "Business priorities",
+        questions: biIds.map((id) => SHARED[id]).filter(Boolean),
+      });
+    }
+  }
+
+
   for (const n of needs) {
     const list = (SERVICE_QUESTIONS[n] ?? []).filter((qd) => {
       if (seen.has(qd.id)) return false;
