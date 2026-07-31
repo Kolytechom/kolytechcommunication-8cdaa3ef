@@ -21,6 +21,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { KolyAssistMark } from "./icon";
 import {
   advisorNote,
@@ -759,6 +760,48 @@ function SummaryRow({
 
 
 /* ------------------------------- Primitives ------------------------------- */
+
+function ResultBlock({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mt-6">
+      <h4 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-orange">
+        {title}
+      </h4>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+function ActionButton({
+  href,
+  icon: Icon,
+  label,
+  external,
+}: {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className="btn-press inline-flex items-center justify-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary"
+    >
+      <Icon className="h-4 w-4 text-brand-orange" aria-hidden />
+      {label}
+    </a>
+  );
+}
+
+function whatsappLink(name: string, industry: string) {
+  const text = `Hello Kolytech Communication. I just completed a KolyAssist consultation${
+    name ? ` (${name})` : ""
+  } for a ${industry.toLowerCase()} organisation and would like to discuss the recommendation.`;
+  return `https://wa.me/2348139135880?text=${encodeURIComponent(text)}`;
+}
+
 
 function Question({
   title,
