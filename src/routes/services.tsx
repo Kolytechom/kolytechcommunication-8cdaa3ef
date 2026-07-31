@@ -35,7 +35,7 @@ function ServicesPage() {
         imageAlt="Enterprise infrastructure"
         tone="mixed"
       >
-        <KolyAssistCTA label="✨ Talk to KolyAssist AI" />
+        <KolyAssistCTA label="✨ Talk to KolyAssist" />
       </PageHero>
 
       <section className="py-20">

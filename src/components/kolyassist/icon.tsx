@@ -1,4 +1,4 @@
-/** KolyAssist AI mark — an orbiting intelligence spark. No generic robots. */
+/** KolyAssist mark — an orbiting intelligence spark. No generic robots. */
 export function KolyAssistMark({ className = "h-6 w-6" }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} fill="none" aria-hidden focusable="false">

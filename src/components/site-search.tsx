@@ -14,6 +14,8 @@ const PAGES: Result[] = [
   { title: "Healthcare IT Solutions", description: "EMR deployment, clinical networks and data security.", to: "/healthcare", category: "Page" },
   { title: "About", description: "About KolyTech Communications.", to: "/about", category: "Page" },
   { title: "Contact", description: "Free consultation for IT Infrastructure, AI & Digital Solutions.", to: "/contact", category: "Page" },
+  { title: "KolyAssist", description: "Your Intelligent Business Technology Advisor — a guided consultation that recommends the right solutions. Powered by Kolytech Communication.", to: "/ai", category: "Page" },
+
 ];
 
 const FAQS: Result[] = [

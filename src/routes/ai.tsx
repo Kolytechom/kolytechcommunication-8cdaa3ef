@@ -51,7 +51,7 @@ function AIPage() {
           >
             Book a free AI consultation <ArrowRight className="h-4 w-4" />
           </Link>
-          <KolyAssistCTA variant="glass" label="✨ Talk to KolyAssist AI" />
+          <KolyAssistCTA variant="glass" label="✨ Talk to KolyAssist" />
         </div>
       </PageHero>
 

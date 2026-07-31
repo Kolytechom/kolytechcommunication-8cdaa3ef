@@ -82,7 +82,7 @@ export function SiteNav() {
               className="btn-press hidden md:inline-flex items-center gap-2 rounded-full bg-brand-gradient px-4 py-2 text-[13px] font-semibold text-white shadow-glow-blue"
             >
               <KolyAssistMark className="h-4 w-4" />
-              KolyAssist AI
+              KolyAssist
             </button>
             <Link
               to="/contact"
@@ -139,7 +139,7 @@ export function SiteNav() {
                 className="mt-1 flex items-center gap-2 rounded-2xl bg-brand-gradient px-3 py-2.5 text-sm font-semibold text-white"
               >
                 <KolyAssistMark className="h-4 w-4" />
-                Talk to KolyAssist AI
+                Talk to KolyAssist
               </motion.button>
             </motion.div>
           </AnimatePresence>
@@ -186,7 +186,7 @@ export function SiteFooter() {
                   className="inline-flex items-center gap-1.5 hover:text-brand-orange transition-colors"
                 >
                   <KolyAssistMark className="h-3.5 w-3.5" />
-                  Talk to KolyAssist AI
+                  Talk to KolyAssist
                 </button>
               </li>
             </ul>

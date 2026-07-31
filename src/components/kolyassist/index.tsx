@@ -9,20 +9,33 @@ import {
 } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, Sparkles, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  Check,
+  Loader2,
+  Mail,
+  MessageCircle,
+  Phone,
+  Sparkles,
+  X,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { KolyAssistMark } from "./icon";
 import {
-  advisorNote,
   buildFlow,
   labelForNeed,
   labelForOption,
   needOptions,
-  recommendServices,
   type QuestionDef,
 } from "./data";
+import { buildRecommendation, type ConsultationContext } from "./intelligence";
 import { EASE } from "@/lib/motion";
 
-const STORAGE_KEY = "kolyassist_session_v2";
+const STORAGE_KEY = "kolyassist_session_v3";
+/** Older keys are migrated once, then removed, so returning visitors keep progress. */
+const LEGACY_KEYS = ["kolyassist_session_v2", "kolyassist_session"];
 
 type Responses = Record<string, string[]>;
 
@@ -73,7 +86,7 @@ export function KolyAssistProvider({ children }: { children: ReactNode }) {
 export function KolyAssistCTA({
   className = "",
   variant = "solid",
-  label = "Talk to KolyAssist AI",
+  label = "Talk to KolyAssist",
 }: {
   className?: string;
   variant?: "solid" | "glass" | "link";
@@ -107,11 +120,11 @@ function KolyAssistLauncher() {
       transition={{ duration: 0.4, ease: EASE.out, delay: 0.6 }}
       whileHover={reduce ? undefined : { y: -2, scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      aria-label="Talk to KolyAssist AI — your intelligent business technology advisor"
+      aria-label="Talk to KolyAssist — your intelligent business technology advisor"
       className="fixed bottom-40 right-4 lg:bottom-44 lg:right-6 z-[55] flex items-center gap-2 rounded-full bg-brand-gradient px-4 py-3 text-white shadow-glow-blue"
     >
       <KolyAssistMark className="h-5 w-5" />
-      <span className="hidden sm:inline text-[13px] font-semibold">KolyAssist AI</span>
+      <span className="hidden sm:inline text-[13px] font-semibold">KolyAssist</span>
     </motion.button>
   );
 }
@@ -125,7 +138,18 @@ function useSession() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      let raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        for (const key of LEGACY_KEYS) {
+          const legacy = localStorage.getItem(key);
+          if (legacy) {
+            raw = legacy;
+            localStorage.setItem(STORAGE_KEY, legacy);
+            localStorage.removeItem(key);
+            break;
+          }
+        }
+      }
       if (raw) {
         const parsed = JSON.parse(raw) as { step?: number; answers?: Partial<Answers> };
         if (parsed.answers)
@@ -148,6 +172,7 @@ function useSession() {
     setStep(0);
     try {
       localStorage.removeItem(STORAGE_KEY);
+      LEGACY_KEYS.forEach((k) => localStorage.removeItem(k));
     } catch {}
   }, []);
 
@@ -216,7 +241,31 @@ function KolyAssistPanel() {
   const organisation = answers.responses.organisation?.[0] ?? "";
   const scale = answers.responses.scale?.[0] ?? "";
   const timeline = answers.responses.timeline?.[0] ?? "";
-  const recs = recommendServices(answers.needs, organisation);
+  const ctx: ConsultationContext = {
+    needs: answers.needs,
+    organisation,
+    scale,
+    timeline,
+    objectives: answers.responses.objective ?? [],
+    maturity: answers.responses.maturity?.[0] ?? "",
+    confidence: answers.responses.confidence?.[0] ?? "",
+    driver: answers.responses.driver?.[0] ?? "",
+    budget: answers.responses.budget?.[0] ?? "",
+  };
+  const recommendation = useMemo(
+    () => (answers.needs.length ? buildRecommendation(ctx) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(ctx)],
+  );
+
+  /* Brief "analysing" state whenever the result step is reached. */
+  const [analysing, setAnalysing] = useState(false);
+  useEffect(() => {
+    if (safeStep !== RESULT_STEP) return;
+    setAnalysing(true);
+    const t = setTimeout(() => setAnalysing(false), reduce ? 0 : 700);
+    return () => clearTimeout(t);
+  }, [safeStep, RESULT_STEP, reduce]);
 
   const progress = ((safeStep + 1) / totalSteps) * 100;
 
@@ -235,7 +284,7 @@ function KolyAssistPanel() {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="KolyAssist AI consultation"
+            aria-label="KolyAssist consultation"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.98 }}
@@ -250,7 +299,7 @@ function KolyAssistPanel() {
                   <KolyAssistMark className="h-6 w-6" />
                 </span>
                 <div>
-                  <h2 className="text-base font-bold text-primary leading-tight">KolyAssist AI</h2>
+                  <h2 className="text-base font-bold text-primary leading-tight">KolyAssist</h2>
                   <p className="text-[11px] text-muted-foreground">
                     Your Intelligent Business Technology Advisor
                   </p>
@@ -259,7 +308,7 @@ function KolyAssistPanel() {
               <button
                 type="button"
                 onClick={closeAssist}
-                aria-label="Close KolyAssist AI"
+                aria-label="Close KolyAssist"
                 className="h-9 w-9 grid place-items-center rounded-full border border-border bg-card text-foreground/70 hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
@@ -297,7 +346,7 @@ function KolyAssistPanel() {
                 {safeStep === 0 && (
                   <div>
                     <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
-                      Welcome to <span className="gradient-text-brand">KolyAssist AI</span>
+                      Welcome to <span className="gradient-text-brand">KolyAssist</span>
                     </h3>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                       Your Intelligent Business Technology Advisor. I'm here to help you identify
@@ -439,57 +488,197 @@ function KolyAssistPanel() {
 
                 {safeStep === RESULT_STEP && (
                   <div>
-                    <h3 className="text-2xl font-black tracking-tight text-foreground">
-                      {answers.name ? `${answers.name.split(" ")[0]}, here's` : "Here's"} your{" "}
-                      <span className="gradient-text-brand">recommended path.</span>
-                    </h3>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                      {advisorNote(organisation, scale, timeline)}
-                    </p>
-                    <div className="mt-5 grid gap-3">
-                      {recs.map((s, i) => {
-                        const Icon = s.icon;
-                        return (
-                          <motion.div
-                            key={s.slug}
-                            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.35, ease: EASE.out, delay: 0.06 * i }}
-                            className="rounded-2xl border border-border bg-card p-4"
-                          >
-                            <div className="flex items-start gap-3">
-                              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
-                                <Icon className="h-4.5 w-4.5" />
-                              </span>
-                              <div>
-                                <h4 className="text-sm font-bold text-primary">{s.title}</h4>
-                                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-                                  {s.short}
+                    {analysing ? (
+                      <div className="grid place-items-center gap-3 py-14 text-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-brand-orange" aria-hidden />
+                        <p className="text-sm font-semibold text-foreground">
+                          Analysing your consultation brief…
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Matching your objectives to the right KolyTech solutions.
+                        </p>
+                      </div>
+                    ) : !recommendation ? (
+                      <div className="py-10 text-center">
+                        <h3 className="text-lg font-bold text-foreground">
+                          We need a little more detail
+                        </h3>
+                        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+                          Select at least one service so KolyAssist can build a recommendation for
+                          you.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setStep(1)}
+                          className="btn-press mt-5 inline-flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-blue"
+                        >
+                          Choose services <ArrowRight className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tight text-foreground">
+                          {answers.name ? `${answers.name.split(" ")[0]}, here's` : "Here's"} your{" "}
+                          <span className="gradient-text-brand">
+                            {recommendation.industry.label.toLowerCase()} technology plan.
+                          </span>
+                        </h3>
+                        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                          {recommendation.advisorNote}
+                        </p>
+
+                        {/* Confidence indicator */}
+                        <div className="mt-5 rounded-2xl border border-border bg-card p-4">
+                          <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+                            <span>Recommendation confidence</span>
+                            <span className="text-brand-orange">
+                              {recommendation.confidenceScore}%
+                            </span>
+                          </div>
+                          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                            <motion.div
+                              className="h-full rounded-full bg-orange-gradient"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${recommendation.confidenceScore}%` }}
+                              transition={{ duration: 0.5, ease: EASE.out }}
+                            />
+                          </div>
+                          <p className="mt-2 text-[11px] text-muted-foreground">
+                            Based on: {recommendation.confidenceReasons.join(" · ")}.
+                          </p>
+                        </div>
+
+                        <ResultBlock title="Recommended solutions">
+                          <div className="grid gap-3">
+                            {recommendation.solutions.map((s, i) => {
+                              const Icon = s.icon;
+                              return (
+                                <motion.div
+                                  key={s.slug}
+                                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.35, ease: EASE.out, delay: 0.06 * i }}
+                                  className="rounded-2xl border border-border bg-card p-4"
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
+                                      <Icon className="h-4.5 w-4.5" />
+                                    </span>
+                                    <div>
+                                      <h4 className="text-sm font-bold text-primary">{s.title}</h4>
+                                      <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                                        {s.short}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              );
+                            })}
+                          </div>
+                        </ResultBlock>
+
+                        <ResultBlock title="Why this fits your organisation">
+                          <ul className="grid gap-2">
+                            {recommendation.rationale.map((r) => (
+                              <li key={r} className="flex items-start gap-2 text-sm">
+                                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
+                                <span className="text-muted-foreground leading-relaxed">{r}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </ResultBlock>
+
+                        <ResultBlock title="Expected business benefits">
+                          <ul className="grid gap-2">
+                            {recommendation.benefits.map((b) => (
+                              <li key={b} className="flex items-start gap-2 text-sm">
+                                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
+                                <span className="text-muted-foreground">{b}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </ResultBlock>
+
+                        <ResultBlock title="Suggested implementation order">
+                          <ol className="grid gap-2">
+                            {recommendation.order.map((o) => (
+                              <li
+                                key={o.service.slug}
+                                className="rounded-2xl border border-border bg-card p-3.5"
+                              >
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-orange">
+                                  {o.phase}
                                 </p>
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <Link
-                        to="/contact"
-                        onClick={closeAssist}
-                        className="btn-press inline-flex items-center gap-2 rounded-full bg-orange-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-orange"
-                      >
-                        Book a specialist call <ArrowRight className="h-4 w-4" />
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={reset}
-                        className="btn-press inline-flex items-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary"
-                      >
-                        Start over
-                      </button>
-                    </div>
+                                <p className="mt-1 text-sm font-semibold text-foreground">
+                                  {o.service.title}
+                                </p>
+                                <p className="mt-0.5 text-xs text-muted-foreground">{o.note}</p>
+                              </li>
+                            ))}
+                          </ol>
+                        </ResultBlock>
+
+                        <ResultBlock title="Complementary services">
+                          <div className="flex flex-wrap gap-2">
+                            {recommendation.complementary.map((c) => (
+                              <span
+                                key={c}
+                                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                              >
+                                {c}
+                              </span>
+                            ))}
+                          </div>
+                        </ResultBlock>
+
+                        <ResultBlock title="Estimated implementation timeline">
+                          <p className="rounded-2xl border border-border bg-card p-3.5 text-sm text-muted-foreground">
+                            {recommendation.estimate}
+                          </p>
+                        </ResultBlock>
+
+                        <ResultBlock title="Recommended next step">
+                          <p className="text-sm text-muted-foreground">{recommendation.nextStep}</p>
+                          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                            <ActionButton
+                              href="tel:+2348139135880"
+                              icon={Phone}
+                              label="Request a Call"
+                            />
+                            <ActionButton
+                              href={whatsappLink(answers.name, recommendation.industry.label)}
+                              icon={MessageCircle}
+                              label="Continue on WhatsApp"
+                              external
+                            />
+                            <Link
+                              to="/contact"
+                              onClick={closeAssist}
+                              className="btn-press inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-orange"
+                            >
+                              <Calendar className="h-4 w-4" /> Book Consultation
+                            </Link>
+                            <ActionButton
+                              href={`mailto:kolytechcom@yahoo.com?subject=${encodeURIComponent(
+                                `KolyAssist consultation — ${recommendation.industry.label}`,
+                              )}`}
+                              icon={Mail}
+                              label="Send Email"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={reset}
+                            className="btn-press mt-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            Start over
+                          </button>
+                        </ResultBlock>
+                      </div>
+                    )}
                   </div>
                 )}
+
               </motion.div>
             </AnimatePresence>
 
@@ -570,6 +759,48 @@ function SummaryRow({
 
 
 /* ------------------------------- Primitives ------------------------------- */
+
+function ResultBlock({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mt-6">
+      <h4 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-orange">
+        {title}
+      </h4>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+function ActionButton({
+  href,
+  icon: Icon,
+  label,
+  external,
+}: {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className="btn-press inline-flex items-center justify-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary"
+    >
+      <Icon className="h-4 w-4 text-brand-orange" aria-hidden />
+      {label}
+    </a>
+  );
+}
+
+function whatsappLink(name: string, industry: string) {
+  const text = `Hello Kolytech Communication. I just completed a KolyAssist consultation${
+    name ? ` (${name})` : ""
+  } for a ${industry.toLowerCase()} organisation and would like to discuss the recommendation.`;
+  return `https://wa.me/2348139135880?text=${encodeURIComponent(text)}`;
+}
+
 
 function Question({
   title,

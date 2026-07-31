@@ -42,12 +42,56 @@ const q = (
 
 /* ------------------------- Shared (merged) questions ------------------------ */
 
+export const objectiveOptions: Option[] = [
+  { id: "security", label: "Improve Security" },
+  { id: "productivity", label: "Increase Productivity" },
+  { id: "cost", label: "Reduce Operating Costs" },
+  { id: "modernise", label: "Modernise Infrastructure" },
+  { id: "cx", label: "Improve Customer Experience" },
+  { id: "automate", label: "Automate Business Processes" },
+  { id: "expansion", label: "Business Expansion" },
+  { id: "compliance", label: "Regulatory Compliance" },
+];
+
+export const maturityOptions: Option[] = [
+  { id: "manual", label: "Mostly Manual" },
+  { id: "partial", label: "Partially Digital" },
+  { id: "digital", label: "Mostly Digital" },
+  { id: "automated", label: "Highly Automated" },
+];
+
+export const confidenceOptions: Option[] = [
+  { id: "full", label: "Full Guidance", hint: "Explain everything in plain language" },
+  { id: "moderate", label: "Moderate Guidance", hint: "A balance of business and technical detail" },
+  { id: "technical", label: "Technical Discussion", hint: "Talk specs with our engineers" },
+];
+
+export const driverOptions: Option[] = [
+  { id: "new", label: "New Business" },
+  { id: "expansion", label: "Expansion" },
+  { id: "upgrade", label: "Upgrade Existing Systems" },
+  { id: "compliance", label: "Compliance" },
+  { id: "emergency", label: "Emergency Replacement" },
+];
+
+export const budgetOptions: Option[] = [
+  { id: "starter", label: "Starter budget" },
+  { id: "defined", label: "Budget already approved" },
+  { id: "flexible", label: "Flexible — value led" },
+  { id: "unknown", label: "Need guidance on budget" },
+];
+
+
 export const organisationOptions: Option[] = [
   { id: "sme", label: "Small or medium business" },
-  { id: "enterprise", label: "Large enterprise" },
+  { id: "enterprise", label: "Large enterprise / corporate" },
   { id: "healthcare", label: "Hospital or clinic" },
   { id: "government", label: "Government or public sector" },
   { id: "education", label: "School or university" },
+  { id: "hospitality", label: "Hotel or hospitality" },
+  { id: "manufacturing", label: "Manufacturing or industrial" },
+  { id: "retail", label: "Retail or e-commerce" },
+  { id: "religious", label: "Religious organisation" },
   { id: "startup", label: "Startup or new venture" },
 ];
 
@@ -88,7 +132,40 @@ const SHARED: Record<string, QuestionDef> = {
     { id: "upgrade", label: "Upgrade or extend what we have" },
     { id: "rescue", label: "Fix an existing system" },
   ]),
+  objective: {
+    id: "objective",
+    title: "What is your primary business objective?",
+    hint: "Select all that apply.",
+    type: "multi",
+    options: objectiveOptions,
+  },
+  maturity: {
+    id: "maturity",
+    title: "How would you describe your organisation today?",
+    type: "single",
+    options: maturityOptions,
+  },
+  confidence: {
+    id: "confidence",
+    title: "How much technical guidance would you like?",
+    type: "single",
+    options: confidenceOptions,
+  },
+  driver: {
+    id: "driver",
+    title: "What is driving this project?",
+    type: "single",
+    options: driverOptions,
+  },
+  budget: {
+    id: "budget",
+    title: "Where are you with budget?",
+    type: "single",
+    optional: true,
+    options: budgetOptions,
+  },
 };
+
 
 /* ------------------------- Service-specific questions ----------------------- */
 
@@ -262,6 +339,23 @@ export function buildFlow(needs: string[]): FlowStep[] {
     });
   }
 
+  // Business intelligence profiling — asked once, whatever the service mix.
+  if (needs.length) {
+    const biIds = ["objective", "maturity", "driver", "confidence", "budget"].filter((id) => {
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+    if (biIds.length) {
+      steps.push({
+        id: "intelligence",
+        heading: "Business priorities",
+        questions: biIds.map((id) => SHARED[id]).filter(Boolean),
+      });
+    }
+  }
+
+
   for (const n of needs) {
     const list = (SERVICE_QUESTIONS[n] ?? []).filter((qd) => {
       if (seen.has(qd.id)) return false;
@@ -287,36 +381,5 @@ export function labelForOption(question: QuestionDef, optionId: string) {
   return question.options.find((o) => o.id === optionId)?.label ?? optionId;
 }
 
-/* ------------------------------ Recommendations ----------------------------- */
-
-const needToSlug: Record<string, string> = {
-  ai: "ai",
-  website: "ai",
-  mobile: "ai",
-  software: "ai",
-  cctv: "cctv",
-  network: "infrastructure",
-  solar: "solar",
-  healthcare: "healthcare",
-  strategy: "support",
-};
-
-export function recommendServices(needs: string[], organisation: string): Service[] {
-  const slugs = new Set(needs.map((n) => needToSlug[n]).filter(Boolean));
-  if (organisation === "healthcare") slugs.add("healthcare");
-  if (organisation === "enterprise" || organisation === "government") slugs.add("infrastructure");
-  if (slugs.size === 0) slugs.add("ai");
-  return services.filter((s) => slugs.has(s.slug)).slice(0, 4);
-}
-
-export function advisorNote(organisation: string, scale: string, timeline: string) {
-  const org =
-    organisationOptions.find((o) => o.id === organisation)?.label.toLowerCase() ??
-    "your organisation";
-  const reach = scaleOptions.find((o) => o.id === scale)?.label.toLowerCase();
-  const when = timelineOptions.find((o) => o.id === timeline)?.label.toLowerCase();
-  const parts = [`Based on ${org}`];
-  if (reach) parts.push(`operating across ${reach}`);
-  if (when) parts.push(`and a timeline of ${when}`);
-  return `${parts.join(", ")}, here is the delivery path our specialists recommend.`;
-}
+/* --------------------------- Recommendation helpers -------------------------- */
+/* The recommendation engine now lives in ./intelligence.ts — no duplicate logic here. */
