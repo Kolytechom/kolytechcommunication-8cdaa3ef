@@ -9,7 +9,18 @@ import {
 } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, Sparkles, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  Check,
+  Loader2,
+  Mail,
+  MessageCircle,
+  Phone,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { KolyAssistMark } from "./icon";
 import {
   advisorNote,
@@ -17,12 +28,14 @@ import {
   labelForNeed,
   labelForOption,
   needOptions,
-  recommendServices,
   type QuestionDef,
 } from "./data";
+import { buildRecommendation, type ConsultationContext } from "./intelligence";
 import { EASE } from "@/lib/motion";
 
-const STORAGE_KEY = "kolyassist_session_v2";
+const STORAGE_KEY = "kolyassist_session_v3";
+/** Older keys are migrated once, then removed, so returning visitors keep progress. */
+const LEGACY_KEYS = ["kolyassist_session_v2", "kolyassist_session"];
 
 type Responses = Record<string, string[]>;
 
@@ -125,7 +138,18 @@ function useSession() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      let raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        for (const key of LEGACY_KEYS) {
+          const legacy = localStorage.getItem(key);
+          if (legacy) {
+            raw = legacy;
+            localStorage.setItem(STORAGE_KEY, legacy);
+            localStorage.removeItem(key);
+            break;
+          }
+        }
+      }
       if (raw) {
         const parsed = JSON.parse(raw) as { step?: number; answers?: Partial<Answers> };
         if (parsed.answers)
@@ -148,6 +172,7 @@ function useSession() {
     setStep(0);
     try {
       localStorage.removeItem(STORAGE_KEY);
+      LEGACY_KEYS.forEach((k) => localStorage.removeItem(k));
     } catch {}
   }, []);
 
@@ -216,7 +241,31 @@ function KolyAssistPanel() {
   const organisation = answers.responses.organisation?.[0] ?? "";
   const scale = answers.responses.scale?.[0] ?? "";
   const timeline = answers.responses.timeline?.[0] ?? "";
-  const recs = recommendServices(answers.needs, organisation);
+  const ctx: ConsultationContext = {
+    needs: answers.needs,
+    organisation,
+    scale,
+    timeline,
+    objectives: answers.responses.objective ?? [],
+    maturity: answers.responses.maturity?.[0] ?? "",
+    confidence: answers.responses.confidence?.[0] ?? "",
+    driver: answers.responses.driver?.[0] ?? "",
+    budget: answers.responses.budget?.[0] ?? "",
+  };
+  const recommendation = useMemo(
+    () => (answers.needs.length ? buildRecommendation(ctx) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(ctx)],
+  );
+
+  /* Brief "analysing" state whenever the result step is reached. */
+  const [analysing, setAnalysing] = useState(false);
+  useEffect(() => {
+    if (safeStep !== RESULT_STEP) return;
+    setAnalysing(true);
+    const t = setTimeout(() => setAnalysing(false), reduce ? 0 : 700);
+    return () => clearTimeout(t);
+  }, [safeStep, RESULT_STEP, reduce]);
 
   const progress = ((safeStep + 1) / totalSteps) * 100;
 
