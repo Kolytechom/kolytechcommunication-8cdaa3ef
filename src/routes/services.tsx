@@ -1,6 +1,6 @@
 import { pageMeta, canonical, ldScript, webPageSchema, breadcrumbSchema, serviceSchema } from "@/lib/seo";
-import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { PageHero, GlassCard, SectionHeading } from "@/components/marketing";
 import { services } from "@/lib/services-data";
@@ -42,6 +42,14 @@ export const Route = createFileRoute("/services")({
   }),
   component: ServicesPage,
 });
+
+/** Services that have a dedicated deep-dive page. */
+const detailPages = {
+  ai: "/ai",
+  cctv: "/cctv",
+  solar: "/solar",
+  healthcare: "/healthcare",
+} as const;
 
 function ServicesPage() {
   return (
@@ -89,6 +97,15 @@ function ServicesPage() {
                       </li>
                     ))}
                   </ul>
+                  {s.slug in detailPages && (
+                    <Link
+                      to={detailPages[s.slug as keyof typeof detailPages]}
+                      className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange hover:underline"
+                    >
+                      Explore {s.title}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
                 </GlassCard>
               );
             })}
