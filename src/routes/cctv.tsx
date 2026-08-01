@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Camera, HardDrive, Smartphone, Lock, Wrench, Building2, Factory, Store, School, HomeIcon, Eye, ShieldCheck, UserCheck, Settings, ArrowRight } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
@@ -6,15 +7,39 @@ import cctvImg from "@/assets/service-cctv.jpg";
 
 export const Route = createFileRoute("/cctv")({
   head: () => ({
-    meta: [
-      { title: "CCTV System Installation — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "Smart security. Complete protection. Advanced CCTV, access control and intrusion detection with 24/7 visibility and remote viewing.",
-      },
-      { property: "og:title", content: "CCTV & Security Systems" },
-      { property: "og:description", content: "24/7 visibility, safety and peace of mind." },
+    meta: pageMeta({
+      title: "CCTV Installation & Access Control in Nigeria — KolyTech",
+      description:
+        "Smart security, complete protection. KolyTech designs and installs advanced CCTV, access control and intrusion detection with 24/7 visibility and remote viewing across Nigeria.",
+      path: "/cctv",
+      ogTitle: "CCTV & Security Systems",
+      ogDescription: "24/7 visibility, safety and peace of mind — CCTV, access control and intrusion detection.",
+    }),
+    links: canonical("/cctv"),
+    scripts: [
+      ldScript(
+        serviceSchema({
+          name: "CCTV & Security Systems Installation",
+          serviceType: "Security system installation",
+          description:
+            "Design, supply and installation of CCTV cameras, DVR/NVR recording, remote viewing, access control and intrusion detection.",
+          path: "/cctv",
+          offers: [
+            "HD CCTV cameras",
+            "DVR / NVR recording",
+            "Remote viewing",
+            "Access control & intrusion detection",
+            "Installation & maintenance",
+          ],
+        }),
+      ),
+      ldScript(
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: "CCTV & Security", path: "/cctv" },
+        ]),
+      ),
     ],
   }),
   component: CCTVPage,

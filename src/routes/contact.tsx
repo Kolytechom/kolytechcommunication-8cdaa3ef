@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, webPageSchema, breadcrumbSchema, localBusinessSchema } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
@@ -7,15 +8,25 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
-    meta: [
-      { title: "Contact — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "Free consultation and professional assessment for IT Infrastructure, AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software Development, and Solar Power. Lagos, Nigeria.",
-      },
-      { property: "og:title", content: "Contact KolyTech" },
-      { property: "og:description", content: "Free consultation for IT Infrastructure, AI & Digital Solutions." },
+    meta: pageMeta({
+      title: "Contact KolyTech Communications — Lagos, Nigeria",
+      description:
+        "Free consultation and professional assessment for IT Infrastructure, AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software Development and Solar Power. Based in Lagos, serving Nigeria.",
+      path: "/contact",
+      ogTitle: "Contact KolyTech Communications",
+      ogDescription: "Free consultation for IT Infrastructure, AI & Digital Solutions in Lagos, Nigeria.",
+    }),
+    links: canonical("/contact"),
+    scripts: [
+      ldScript(
+        webPageSchema({
+          name: "Contact KolyTech Communications",
+          description: "Phone, email and enquiry form for KolyTech Communications, Lagos, Nigeria.",
+          path: "/contact",
+        }),
+      ),
+      ldScript(localBusinessSchema),
+      ldScript(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])),
     ],
   }),
   component: ContactPage,

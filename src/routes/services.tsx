@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, webPageSchema, breadcrumbSchema, serviceSchema } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2 } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
@@ -8,15 +9,35 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
-    meta: [
-      { title: "Services — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "IT Infrastructure, AI & Digital Solutions: network administration, systems support, AI & automation, software development, CCTV, solar and healthcare IT.",
-      },
-      { property: "og:title", content: "KolyTech Services" },
-      { property: "og:description", content: "IT Infrastructure, AI, automation, software, CCTV, solar and healthcare IT services." },
+    meta: pageMeta({
+      title: "IT, AI, CCTV & Solar Services — KolyTech Communications",
+      description:
+        "IT Infrastructure, AI & Digital Solutions services: network administration, systems support, AI & automation, software development, CCTV security, solar power and healthcare IT.",
+      path: "/services",
+      ogTitle: "KolyTech Services — Infrastructure, AI, Security, Solar",
+      ogDescription: "IT Infrastructure, AI, automation, software, CCTV, solar and healthcare IT services.",
+    }),
+    links: canonical("/services"),
+    scripts: [
+      ldScript(
+        webPageSchema({
+          name: "KolyTech Services",
+          description:
+            "The full KolyTech service portfolio across infrastructure, support, AI, security, solar and healthcare IT.",
+          path: "/services",
+        }),
+      ),
+      ldScript(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }])),
+      ...services.map((s) =>
+        ldScript(
+          serviceSchema({
+            name: s.title,
+            description: s.short,
+            path: "/services",
+            offers: s.bullets,
+          }),
+        ),
+      ),
     ],
   }),
   component: ServicesPage,
