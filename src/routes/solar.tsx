@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Zap, ShieldCheck, Leaf, HomeIcon, ArrowRight } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
@@ -6,15 +7,38 @@ import solarImg from "@/assets/service-solar.jpg";
 
 export const Route = createFileRoute("/solar")({
   head: () => ({
-    meta: [
-      { title: "Solar Systems Installation — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "High-performance solar power systems for homes, businesses and institutions across Nigeria. Reliable. Sustainable. Cost-effective.",
-      },
-      { property: "og:title", content: "Solar Systems Installation" },
-      { property: "og:description", content: "Reliable, sustainable, cost-effective solar power installations." },
+    meta: pageMeta({
+      title: "Solar Power & Inverter Installation in Nigeria — KolyTech",
+      description:
+        "High-performance solar power, inverter and battery backup systems for homes, businesses and institutions across Nigeria. Reliable, sustainable and cost-effective.",
+      path: "/solar",
+      ogTitle: "Solar Systems Installation",
+      ogDescription: "Reliable, sustainable, cost-effective solar power and battery backup installations.",
+    }),
+    links: canonical("/solar"),
+    scripts: [
+      ldScript(
+        serviceSchema({
+          name: "Solar & Power Backup Installation",
+          serviceType: "Solar power installation",
+          description:
+            "Design and installation of residential, commercial, hybrid and off-grid solar systems with inverter and battery backup.",
+          path: "/solar",
+          offers: [
+            "Residential & commercial solar",
+            "Inverter & battery backup",
+            "Hybrid & off-grid systems",
+            "System maintenance",
+          ],
+        }),
+      ),
+      ldScript(
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: "Solar & Power", path: "/solar" },
+        ]),
+      ),
     ],
   }),
   component: SolarPage,

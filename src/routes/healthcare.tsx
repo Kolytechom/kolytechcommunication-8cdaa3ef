@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { HeartPulse, Network, Lock, Server, Headphones, ShieldCheck, TrendingUp, KeyRound, Handshake, Building2, Cross, FlaskConical, Activity, Stethoscope, ArrowRight } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
@@ -6,15 +7,39 @@ import healthImg from "@/assets/service-healthcare.jpg";
 
 export const Route = createFileRoute("/healthcare")({
   head: () => ({
-    meta: [
-      { title: "Healthcare IT Solutions — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "Secure, reliable healthcare IT: EMR deployment, hospital networking, data security and compliance, healthcare infrastructure and 24/7 support.",
-      },
-      { property: "og:title", content: "Healthcare IT Solutions" },
-      { property: "og:description", content: "Connecting care. Powering health. Enterprise IT built for healthcare." },
+    meta: pageMeta({
+      title: "Healthcare IT, EMR & Hospital Networking — KolyTech",
+      description:
+        "Secure healthcare IT for Nigerian hospitals and clinics: EMR/HMIS deployment, hospital networking, data security and compliance, clinical infrastructure and 24/7 support.",
+      path: "/healthcare",
+      ogTitle: "Healthcare IT Solutions",
+      ogDescription: "Connecting care. Powering health. Enterprise IT built for healthcare.",
+    }),
+    links: canonical("/healthcare"),
+    scripts: [
+      ldScript(
+        serviceSchema({
+          name: "Healthcare IT Solutions",
+          serviceType: "Healthcare information technology",
+          description:
+            "EMR/HMIS deployment and support, hospital networking, healthcare data security and clinical infrastructure.",
+          path: "/healthcare",
+          offers: [
+            "EMR deployment & support",
+            "Hospital networking",
+            "Data security & compliance",
+            "Healthcare infrastructure",
+            "IT support & maintenance",
+          ],
+        }),
+      ),
+      ldScript(
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: "Healthcare IT", path: "/healthcare" },
+        ]),
+      ),
     ],
   }),
   component: HealthcarePage,

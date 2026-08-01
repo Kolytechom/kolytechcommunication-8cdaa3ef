@@ -14,22 +14,30 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
 import { TechPartners } from "@/components/tech-partners";
+import { faqs } from "@/lib/faq-data";
+import { pageMeta, canonical, ldScript, webPageSchema, faqSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
-      {
-        name: "description",
-        content:
-          "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
-      },
-      { property: "og:title", content: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
-      {
-        property: "og:description",
-        content:
-          "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
-      },
+    meta: pageMeta({
+      title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+      description:
+        "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+      path: "/",
+      ogDescription:
+        "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+    }),
+    links: canonical("/"),
+    scripts: [
+      ldScript(
+        webPageSchema({
+          name: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+          description:
+            "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+          path: "/",
+        }),
+      ),
+      ldScript(faqSchema(faqs)),
     ],
   }),
   component: Home,
@@ -409,24 +417,7 @@ function Testimonials() {
 }
 
 function FAQ() {
-  const faqs = [
-    {
-      q: "Do you handle both design and installation?",
-      a: "Yes. Every project starts with an on-site assessment and design, then our own engineers handle installation, commissioning and handover.",
-    },
-    {
-      q: "Which regions do you cover?",
-      a: "We serve clients across Nigeria from our Lagos base, with project teams that mobilize nationwide for larger deployments.",
-    },
-    {
-      q: "Do you provide ongoing maintenance?",
-      a: "We offer preventive and corrective maintenance contracts, 24/7 monitoring options and periodic health checks for every system we install.",
-    },
-    {
-      q: "Can you work with our existing vendors and equipment?",
-      a: "Absolutely. We are vendor-neutral and regularly integrate with existing infrastructure, cabling and hardware.",
-    },
-  ];
+
   const [open, setOpen] = useState<number | null>(0);
   return (
     <section className="relative py-20 sm:py-28">

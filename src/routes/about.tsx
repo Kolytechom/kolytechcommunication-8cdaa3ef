@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, webPageSchema, breadcrumbSchema } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { PageHero, GlassCard, SectionHeading } from "@/components/marketing";
@@ -6,15 +7,25 @@ import infraImg from "@/assets/service-infra.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
-    meta: [
-      { title: "About — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering enterprise-grade infrastructure, network & security, AI, automation and software development.",
-      },
-      { property: "og:title", content: "About KolyTech" },
-      { property: "og:description", content: "Powering Infrastructure. Securing Systems. Driving Innovation." },
+    meta: pageMeta({
+      title: "About KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+      description:
+        "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering enterprise-grade infrastructure, network & security, AI, automation and software development across Nigeria.",
+      path: "/about",
+      ogTitle: "About KolyTech Communications",
+      ogDescription: "Powering Infrastructure. Securing Systems. Driving Innovation.",
+    }),
+    links: canonical("/about"),
+    scripts: [
+      ldScript(
+        webPageSchema({
+          name: "About KolyTech Communications",
+          description:
+            "Who we are: an IT Infrastructure, AI & Digital Solutions company serving organisations across Nigeria.",
+          path: "/about",
+        }),
+      ),
+      ldScript(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "About", path: "/about" }])),
     ],
   }),
   component: AboutPage,

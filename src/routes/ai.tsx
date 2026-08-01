@@ -1,3 +1,4 @@
+import { pageMeta, canonical, ldScript, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Brain, Bot, Code2, Palette, Film } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
@@ -9,22 +10,42 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
-    meta: [
-      { title: "AI Solutions & Digital Innovation — KolyTech Communications" },
-      {
-        name: "description",
-        content:
-          "Practical Artificial Intelligence, automation, software development and digital solutions that improve productivity, streamline operations and accelerate business growth.",
-      },
-      { property: "og:title", content: "AI Solutions & Digital Innovation" },
-      {
-        property: "og:description",
-        content:
-          "AI strategy, automation, chatbots, custom software, SaaS, UI/UX and digital transformation.",
-      },
-      { property: "og:url", content: "/ai" },
+    meta: pageMeta({
+      title: "AI Solutions & Digital Innovation in Nigeria — KolyTech",
+      description:
+        "Practical AI for Nigerian businesses: AI strategy and assessment, chatbots and assistants, workflow automation, SaaS, web and mobile development, UI/UX design and digital transformation.",
+      path: "/ai",
+      ogTitle: "AI Solutions & Digital Innovation",
+      ogDescription:
+        "AI strategy, chatbots, workflow automation, software products, design and digital transformation.",
+    }),
+    links: canonical("/ai"),
+    scripts: [
+      ldScript(
+        serviceSchema({
+          name: "AI Solutions & Digital Innovation",
+          serviceType: "Artificial intelligence and software development",
+          description:
+            "AI strategy and readiness assessment, AI chatbots and assistants, workflow automation, SaaS, web and mobile products, UI/UX design and digital transformation.",
+          path: "/ai",
+          offers: [
+            "AI strategy & readiness assessment",
+            "AI chatbots & assistants",
+            "Business & workflow automation",
+            "SaaS, web & mobile development",
+            "UI/UX design & branding",
+            "AI media & digital transformation",
+          ],
+        }),
+      ),
+      ldScript(
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: "AI Solutions & Digital Innovation", path: "/ai" },
+        ]),
+      ),
     ],
-    links: [{ rel: "canonical", href: "/ai" }],
   }),
   component: AIPage,
 });
