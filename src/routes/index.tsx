@@ -17,19 +17,25 @@ import { TechPartners } from "@/components/tech-partners";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
-      {
-        name: "description",
-        content:
-          "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
-      },
-      { property: "og:title", content: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions" },
-      {
-        property: "og:description",
-        content:
-          "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
-      },
+    meta: pageMeta({
+      title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+      description:
+        "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+      path: "/",
+      ogDescription:
+        "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+    }),
+    links: canonical("/"),
+    scripts: [
+      ldScript(
+        webPageSchema({
+          name: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+          description:
+            "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+          path: "/",
+        }),
+      ),
+      ldScript(faqSchema(faqs)),
     ],
   }),
   component: Home,
