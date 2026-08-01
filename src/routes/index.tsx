@@ -14,6 +14,8 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 import { AnimatedStats } from "@/components/animated-stats";
 import { Portfolio } from "@/components/portfolio";
 import { TechPartners } from "@/components/tech-partners";
+import { faqs } from "@/lib/faq-data";
+import { pageMeta, canonical, ldScript, webPageSchema, faqSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
