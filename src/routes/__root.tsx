@@ -17,6 +17,7 @@ import { ThemeProvider, themeInitScript } from "../components/theme-provider";
 import { WhatsAppButton } from "../components/whatsapp-button";
 import { MobileContactBar } from "../components/mobile-contact-bar";
 import { KolyAssistProvider } from "../components/kolyassist";
+import { organizationSchema, websiteSchema, ldScript } from "../lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -98,10 +99,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "preconnect", href: "https://rsms.me/" },
+      { rel: "preconnect", href: "https://rsms.me/", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://rsms.me/inter/inter.css" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+    scripts: [ldScript(organizationSchema), ldScript(websiteSchema)],
   }),
   shellComponent: RootShell,
   component: RootComponent,
