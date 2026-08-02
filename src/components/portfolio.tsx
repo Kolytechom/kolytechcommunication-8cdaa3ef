@@ -6,7 +6,11 @@ import cctvImg from "@/assets/service-cctv.jpg";
 import solarImg from "@/assets/service-solar.jpg";
 import healthcareImg from "@/assets/service-healthcare.jpg";
 import infraImg from "@/assets/service-infra.jpg";
-import heroImg from "@/assets/hero-globe.jpg";
+import aiImg from "@/assets/service-ai.jpg";
+import schoolImg from "@/assets/project-school-wifi.jpg";
+import retailImg from "@/assets/project-retail-it.jpg";
+import webdevImg from "@/assets/project-webdev.jpg";
+import clinicSolarImg from "@/assets/project-clinic-solar.jpg";
 
 type Project = {
   title: string;
@@ -44,27 +48,34 @@ const PROJECTS: Project[] = [
     title: "School Campus Wi-Fi",
     category: "Schools",
     description: "Mesh Wi-Fi, filtering and cabling for an academic campus with 800+ users.",
-    image: infraImg,
+    image: schoolImg,
   },
   {
     title: "SMB Business Website",
     category: "Websites",
     description: "Responsive marketing site with CMS, contact automation and SEO foundations.",
-    image: heroImg,
+    image: webdevImg,
   },
   {
     title: "Retail Chain IT Support",
     category: "Businesses",
     description: "Managed IT support and POS network across a growing retail brand.",
-    image: infraImg,
+    image: retailImg,
   },
   {
     title: "Clinic Solar Backup",
     category: "Hospitals",
     description: "Uninterrupted power for critical care equipment with hybrid solar + battery.",
-    image: solarImg,
+    image: clinicSolarImg,
+  },
+  {
+    title: "AI Workflow Automation",
+    category: "Businesses",
+    description: "Document intelligence and enquiry triage automating repetitive back-office work.",
+    image: aiImg,
   },
 ];
+
 
 const CATEGORIES = [
   "All",

@@ -20,9 +20,9 @@ import { pageMeta, canonical, ldScript, webPageSchema, faqSchema } from "@/lib/s
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: pageMeta({
-      title: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+      title: "Kolytech Communication — IT Infrastructure, AI & Digital Solutions",
       description:
-        "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
+        "Kolytech Communication is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
       path: "/",
       ogDescription:
         "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
     scripts: [
       ldScript(
         webPageSchema({
-          name: "KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+          name: "Kolytech Communication — IT Infrastructure, AI & Digital Solutions",
           description:
             "IT Infrastructure, AI, business automation, software development, CCTV, solar and healthcare IT across Nigeria.",
           path: "/",
@@ -100,7 +100,7 @@ function Hero() {
               Securing systems.
             </motion.h1>
             <motion.p variants={item} className="mt-6 max-w-lg text-lg text-muted-foreground leading-relaxed">
-              KolyTech Communications is an IT Infrastructure, AI & Digital Solutions
+              Kolytech Communication is an IT Infrastructure, AI & Digital Solutions
               company — delivering enterprise-grade infrastructure, network & security,
               AI, business automation and software development to keep organizations
               connected, intelligent and future-ready.
@@ -287,7 +287,7 @@ function FeatureSplit() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <span className="pill bg-orange-gradient text-white">Why KolyTech</span>
+          <span className="pill bg-orange-gradient text-white">Why Kolytech</span>
           <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-primary">
             High-availability, <span className="gradient-text-brand">by design.</span>
           </h2>
@@ -384,7 +384,7 @@ function Industries() {
 function Testimonials() {
   const quotes = [
     {
-      q: "KolyTech rebuilt our clinic network and EMR rollout. Zero downtime since day one.",
+      q: "Kolytech rebuilt our clinic network and EMR rollout. Zero downtime since day one.",
       a: "Medical Director, Lagos private hospital",
     },
     {

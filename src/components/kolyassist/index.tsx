@@ -415,7 +415,7 @@ function KolyAssistPanel() {
                 {safeStep === CONTACT_STEP && (
                   <Question
                     title="Where should we send your recommendation?"
-                    hint="A KolyTech specialist reviews every consultation."
+                    hint="A Kolytech specialist reviews every consultation."
                   >
                     <div className="grid gap-4 sm:grid-cols-2">
                       <FieldInput
@@ -495,7 +495,7 @@ function KolyAssistPanel() {
                           Analysing your consultation brief…
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Matching your objectives to the right KolyTech solutions.
+                          Matching your objectives to the right Kolytech solutions.
                         </p>
                       </div>
                     ) : !recommendation ? (

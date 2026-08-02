@@ -333,7 +333,7 @@ export function buildRecommendation(ctx: ConsultationContext): Recommendation {
     nextStep:
       ctx.driver === "emergency" || ctx.timeline === "urgent"
         ? "Request a call today — we can schedule an emergency site assessment within 48 hours."
-        : "Book a free consultation so a KolyTech specialist can validate this plan on site.",
+        : "Book a free consultation so a Kolytech specialist can validate this plan on site.",
     confidenceScore,
     confidenceReasons: met.map(([, label]) => label),
   };

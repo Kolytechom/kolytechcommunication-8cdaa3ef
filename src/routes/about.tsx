@@ -8,18 +8,18 @@ import infraImg from "@/assets/service-infra.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: pageMeta({
-      title: "About KolyTech Communications — IT Infrastructure, AI & Digital Solutions",
+      title: "About Kolytech Communication — IT Infrastructure, AI & Digital Solutions",
       description:
-        "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering enterprise-grade infrastructure, network & security, AI, automation and software development across Nigeria.",
+        "Kolytech Communication is an IT Infrastructure, AI & Digital Solutions company delivering enterprise-grade infrastructure, network & security, AI, automation and software development across Nigeria.",
       path: "/about",
-      ogTitle: "About KolyTech Communications",
+      ogTitle: "About Kolytech Communication",
       ogDescription: "Powering Infrastructure. Securing Systems. Driving Innovation.",
     }),
     links: canonical("/about"),
     scripts: [
       ldScript(
         webPageSchema({
-          name: "About KolyTech Communications",
+          name: "About Kolytech Communication",
           description:
             "Who we are: an IT Infrastructure, AI & Digital Solutions company serving organisations across Nigeria.",
           path: "/about",
@@ -45,10 +45,10 @@ function AboutPage() {
     <div className="min-h-screen bg-background">
       <SiteNav />
       <PageHero
-        eyebrow="About KolyTech"
+        eyebrow="About Kolytech"
         title="IT Infrastructure, AI &"
         accent="Digital Solutions."
-        subtitle="KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company — delivering enterprise-grade infrastructure, network & security, AI, business automation and software development to help organizations stay connected, intelligent and future-ready."
+        subtitle="Kolytech Communication is an IT Infrastructure, AI & Digital Solutions company — delivering enterprise-grade infrastructure, network & security, AI, business automation and software development to help organizations stay connected, intelligent and future-ready."
         image={infraImg}
         imageAlt="Enterprise infrastructure"
         tone="mixed"

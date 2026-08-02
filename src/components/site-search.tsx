@@ -6,13 +6,13 @@ import { services } from "@/lib/services-data";
 type Result = { title: string; description: string; to: string; category: string };
 
 const PAGES: Result[] = [
-  { title: "Home", description: "KolyTech — IT Infrastructure, AI & Digital Solutions.", to: "/", category: "Page" },
+  { title: "Home", description: "Kolytech — IT Infrastructure, AI & Digital Solutions.", to: "/", category: "Page" },
   { title: "Services", description: "IT infrastructure, networking, AI & automation, software, CCTV, solar and healthcare IT.", to: "/services", category: "Page" },
   { title: "AI Solutions & Digital Innovation", description: "AI strategy, automation, chatbots, custom software, SaaS, UI/UX and digital transformation.", to: "/ai", category: "Page" },
   { title: "Solar Systems Installation", description: "Residential and commercial solar, hybrid and off-grid.", to: "/solar", category: "Page" },
   { title: "CCTV & Security Systems", description: "Smart security and complete protection for homes and business.", to: "/cctv", category: "Page" },
   { title: "Healthcare IT Solutions", description: "EMR deployment, clinical networks and data security.", to: "/healthcare", category: "Page" },
-  { title: "About", description: "About KolyTech Communications.", to: "/about", category: "Page" },
+  { title: "About", description: "About Kolytech Communication.", to: "/about", category: "Page" },
   { title: "Contact", description: "Free consultation for IT Infrastructure, AI & Digital Solutions.", to: "/contact", category: "Page" },
   { title: "KolyAssist", description: "Your Intelligent Business Technology Advisor — a guided consultation that recommends the right solutions. Powered by Kolytech Communication.", to: "/ai", category: "Page" },
 

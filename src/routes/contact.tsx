@@ -9,19 +9,19 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: pageMeta({
-      title: "Contact KolyTech Communications — Lagos, Nigeria",
+      title: "Contact Kolytech Communication — Lagos, Nigeria",
       description:
         "Free consultation and professional assessment for IT Infrastructure, AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software Development and Solar Power. Based in Lagos, serving Nigeria.",
       path: "/contact",
-      ogTitle: "Contact KolyTech Communications",
+      ogTitle: "Contact Kolytech Communication",
       ogDescription: "Free consultation for IT Infrastructure, AI & Digital Solutions in Lagos, Nigeria.",
     }),
     links: canonical("/contact"),
     scripts: [
       ldScript(
         webPageSchema({
-          name: "Contact KolyTech Communications",
-          description: "Phone, email and enquiry form for KolyTech Communications, Lagos, Nigeria.",
+          name: "Contact Kolytech Communication",
+          description: "Phone, email and enquiry form for Kolytech Communication, Lagos, Nigeria.",
           path: "/contact",
         }),
       ),
@@ -107,7 +107,7 @@ function ContactPage() {
                 <CheckCircle2 className="h-12 w-12 text-brand-orange mx-auto" />
                 <h3 className="mt-4 text-2xl font-bold">Message received</h3>
                 <p className="mt-2 text-muted-foreground max-w-sm mx-auto">
-                  Thanks — a KolyTech specialist will get back to you within one business day.
+                  Thanks — a Kolytech specialist will get back to you within one business day.
                 </p>
               </div>
             ) : (

@@ -8,9 +8,9 @@ import cctvImg from "@/assets/service-cctv.jpg";
 export const Route = createFileRoute("/cctv")({
   head: () => ({
     meta: pageMeta({
-      title: "CCTV Installation & Access Control in Nigeria — KolyTech",
+      title: "CCTV Installation & Access Control in Nigeria — Kolytech",
       description:
-        "Smart security, complete protection. KolyTech designs and installs advanced CCTV, access control and intrusion detection with 24/7 visibility and remote viewing across Nigeria.",
+        "Smart security, complete protection. Kolytech designs and installs advanced CCTV, access control and intrusion detection with 24/7 visibility and remote viewing across Nigeria.",
       path: "/cctv",
       ogTitle: "CCTV & Security Systems",
       ogDescription: "24/7 visibility, safety and peace of mind — CCTV, access control and intrusion detection.",
