@@ -8,7 +8,7 @@ import solarImg from "@/assets/service-solar.jpg";
 export const Route = createFileRoute("/solar")({
   head: () => ({
     meta: pageMeta({
-      title: "Solar Power & Inverter Installation in Nigeria — KolyTech",
+      title: "Solar Power & Inverter Installation in Nigeria — Kolytech",
       description:
         "High-performance solar power, inverter and battery backup systems for homes, businesses and institutions across Nigeria. Reliable, sustainable and cost-effective.",
       path: "/solar",

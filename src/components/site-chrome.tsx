@@ -24,7 +24,7 @@ export function Logo({ className = "" }: { className?: string; variant?: "light"
     <Link to="/" className={`flex items-center ${className}`}>
       <img
         src={logoImg}
-        alt="KolyTech Communications"
+        alt="Kolytech Communication"
         className="h-10 sm:h-11 w-auto object-contain"
       />
     </Link>
@@ -158,7 +158,7 @@ export function SiteFooter() {
           <div className="md:col-span-2">
             <Logo />
             <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              KolyTech Communications is an IT Infrastructure, AI & Digital Solutions
+              Kolytech Communication is an IT Infrastructure, AI & Digital Solutions
               company delivering enterprise-grade infrastructure, network & security,
               AI, business automation and software development across Nigeria and beyond.
             </p>
@@ -216,7 +216,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} KolyTech Communications. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Kolytech Communication. All rights reserved.</p>
           <p className="tracking-[0.2em]">
             POWERING <span className="text-brand-orange">INFRASTRUCTURE</span>. SECURING{" "}
             <span className="text-brand-orange">SYSTEMS</span>. DRIVING{" "}

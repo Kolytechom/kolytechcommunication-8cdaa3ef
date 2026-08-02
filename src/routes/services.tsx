@@ -10,20 +10,20 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: pageMeta({
-      title: "IT, AI, CCTV & Solar Services — KolyTech Communications",
+      title: "IT, AI, CCTV & Solar Services — Kolytech Communication",
       description:
         "IT Infrastructure, AI & Digital Solutions services: network administration, systems support, AI & automation, software development, CCTV security, solar power and healthcare IT.",
       path: "/services",
-      ogTitle: "KolyTech Services — Infrastructure, AI, Security, Solar",
+      ogTitle: "Kolytech Services — Infrastructure, AI, Security, Solar",
       ogDescription: "IT Infrastructure, AI, automation, software, CCTV, solar and healthcare IT services.",
     }),
     links: canonical("/services"),
     scripts: [
       ldScript(
         webPageSchema({
-          name: "KolyTech Services",
+          name: "Kolytech Services",
           description:
-            "The full KolyTech service portfolio across infrastructure, support, AI, security, solar and healthcare IT.",
+            "The full Kolytech service portfolio across infrastructure, support, AI, security, solar and healthcare IT.",
           path: "/services",
         }),
       ),
@@ -70,7 +70,7 @@ function ServicesPage() {
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
-            title="Everything KolyTech"
+            title="Everything Kolytech"
             accent="does under one roof."
             description="Every engagement starts with a site assessment and ends with documentation, training and ongoing support."
           />

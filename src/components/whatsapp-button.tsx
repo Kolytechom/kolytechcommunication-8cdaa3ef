@@ -50,7 +50,7 @@ export function WhatsAppButton() {
         <div
           className="fixed bottom-40 right-4 lg:bottom-28 lg:right-6 z-[60] w-[calc(100vw-2rem)] max-w-sm animate-rise"
           role="dialog"
-          aria-label="Chat with KolyTech on WhatsApp"
+          aria-label="Chat with Kolytech on WhatsApp"
         >
           <div className="rounded-2xl border border-border bg-card shadow-xl overflow-hidden">
             <div className="flex items-center gap-3 bg-[#25D366] px-4 py-3 text-white">
@@ -58,7 +58,7 @@ export function WhatsAppButton() {
                 <WhatsAppIcon className="h-5 w-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold">KolyTech Support</div>
+                <div className="text-sm font-semibold">Kolytech Support</div>
                 <div className="text-[11px] opacity-90">Typically replies in minutes</div>
               </div>
               <button
@@ -101,7 +101,7 @@ export function WhatsAppButton() {
         href={WA_HREF}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Chat with KolyTech on WhatsApp"
+        aria-label="Chat with Kolytech on WhatsApp"
         className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-[60] group"
       >
         <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping" aria-hidden />

@@ -8,7 +8,7 @@ import healthImg from "@/assets/service-healthcare.jpg";
 export const Route = createFileRoute("/healthcare")({
   head: () => ({
     meta: pageMeta({
-      title: "Healthcare IT, EMR & Hospital Networking — KolyTech",
+      title: "Healthcare IT, EMR & Hospital Networking — Kolytech",
       description:
         "Secure healthcare IT for Nigerian hospitals and clinics: EMR/HMIS deployment, hospital networking, data security and compliance, clinical infrastructure and 24/7 support.",
       path: "/healthcare",

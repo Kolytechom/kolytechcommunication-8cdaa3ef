@@ -1,7 +1,7 @@
 /** Central SEO helpers: canonical URLs, per-page meta and JSON-LD builders. */
 
 export const SITE_URL = "https://koytechcommunications.lovable.app";
-export const SITE_NAME = "KolyTech Communications";
+export const SITE_NAME = "Kolytech Communication";
 
 export const BUSINESS = {
   name: SITE_NAME,
@@ -11,7 +11,7 @@ export const BUSINESS = {
   country: "NG",
   areaServed: "Nigeria",
   description:
-    "KolyTech Communications is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar power and healthcare IT across Nigeria.",
+    "Kolytech Communication is an IT Infrastructure, AI & Digital Solutions company delivering network & security, AI, business automation, software development, CCTV, solar power and healthcare IT across Nigeria.",
 };
 
 export const url = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;

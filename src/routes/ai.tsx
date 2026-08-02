@@ -11,7 +11,7 @@ import { KolyAssistCTA } from "@/components/kolyassist";
 export const Route = createFileRoute("/ai")({
   head: () => ({
     meta: pageMeta({
-      title: "AI Solutions & Digital Innovation in Nigeria — KolyTech",
+      title: "AI Solutions & Digital Innovation in Nigeria — Kolytech",
       description:
         "Practical AI for Nigerian businesses: AI strategy and assessment, chatbots and assistants, workflow automation, SaaS, web and mobile development, UI/UX design and digital transformation.",
       path: "/ai",
