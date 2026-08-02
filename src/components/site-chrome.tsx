@@ -162,11 +162,10 @@ export function SiteFooter() {
               company delivering enterprise-grade infrastructure, network & security,
               AI, business automation and software development across Nigeria and beyond.
             </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="pill glass text-primary">Powering Infrastructure</span>
-              <span className="pill glass text-primary">Securing Systems</span>
-              <span className="pill glass text-primary">Driving Innovation</span>
-            </div>
+            <p className="mt-4 text-sm font-semibold text-primary">
+              18+ years of professional experience across Nigeria.
+            </p>
+
           </div>
 
           <div>
