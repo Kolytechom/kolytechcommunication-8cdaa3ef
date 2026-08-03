@@ -4,7 +4,7 @@ import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Reveal } from "@/components/motion";
 import { KolyAssistCTA } from "@/components/kolyassist";
-import { knowledgeArticles, knowledgeCategories } from "@/lib/knowledge-data";
+import { knowledgeArticles, knowledgeCategories, type KnowledgeArticle } from "@/lib/knowledge-data";
 import { services } from "@/lib/services-data";
 import { pageMeta, canonical, ldScript, breadcrumbSchema, url, SITE_URL, SITE_NAME } from "@/lib/seo";
 
@@ -78,7 +78,7 @@ function ArticleNotFound() {
 }
 
 function ArticlePage() {
-  const { article } = Route.useLoaderData();
+  const { article } = Route.useLoaderData() as { article: KnowledgeArticle };
   const category = knowledgeCategories.find((c) => c.id === article.category);
   const related = services.filter((s) => article.relatedServices.includes(s.slug));
   const more = knowledgeArticles.filter((a) => a.slug !== article.slug).slice(0, 3);

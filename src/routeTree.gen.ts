@@ -19,6 +19,8 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as KnowledgeIndexRouteImport } from './routes/knowledge.index'
+import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
+import { Route as KnowledgeSlugRouteImport } from './routes/knowledge.$slug'
 
 const SolarRoute = SolarRouteImport.update({
   id: '/solar',
@@ -70,6 +72,16 @@ const KnowledgeIndexRoute = KnowledgeIndexRouteImport.update({
   path: '/knowledge/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
+  id: '/industries/',
+  path: '/industries/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeSlugRoute = KnowledgeSlugRouteImport.update({
+  id: '/knowledge/$slug',
+  path: '/knowledge/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +93,8 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/knowledge/': typeof KnowledgeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +107,8 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/industries': typeof IndustriesIndexRoute
   '/knowledge': typeof KnowledgeIndexRoute
 }
 export interface FileRoutesById {
@@ -106,6 +122,8 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/knowledge/': typeof KnowledgeIndexRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +138,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge/$slug'
+    | '/industries/'
     | '/knowledge/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +152,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge/$slug'
+    | '/industries'
     | '/knowledge'
   id:
     | '__root__'
@@ -144,6 +166,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge/$slug'
+    | '/industries/'
     | '/knowledge/'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +181,8 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
+  KnowledgeSlugRoute: typeof KnowledgeSlugRoute
+  IndustriesIndexRoute: typeof IndustriesIndexRoute
   KnowledgeIndexRoute: typeof KnowledgeIndexRoute
 }
 
@@ -232,6 +258,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KnowledgeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/industries/': {
+      id: '/industries/'
+      path: '/industries'
+      fullPath: '/industries/'
+      preLoaderRoute: typeof IndustriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge/$slug': {
+      id: '/knowledge/$slug'
+      path: '/knowledge/$slug'
+      fullPath: '/knowledge/$slug'
+      preLoaderRoute: typeof KnowledgeSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -245,6 +285,8 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
+  KnowledgeSlugRoute: KnowledgeSlugRoute,
+  IndustriesIndexRoute: IndustriesIndexRoute,
   KnowledgeIndexRoute: KnowledgeIndexRoute,
 }
 export const routeTree = rootRouteImport
