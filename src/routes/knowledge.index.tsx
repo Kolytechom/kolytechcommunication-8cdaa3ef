@@ -15,7 +15,7 @@ const TITLE = "Knowledge Centre — IT, AI, Security & Power Guides | Kolytech C
 const DESCRIPTION =
   "Practical guides on IT infrastructure, CCTV design, AI and automation, hybrid solar sizing and healthcare IT — written by the engineers who deliver these projects in Nigeria.";
 
-export const Route = createFileRoute("/knowledge")({
+export const Route = createFileRoute("/knowledge/")({
   head: () => ({
     meta: pageMeta({
       title: TITLE,

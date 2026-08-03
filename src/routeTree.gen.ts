@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolarRouteImport } from './routes/solar'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as HealthcareRouteImport } from './routes/healthcare'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CctvRouteImport } from './routes/cctv'
@@ -32,6 +33,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeRoute = KnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthcareRoute = HealthcareRouteImport.update({
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
+    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
+    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
+    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   CctvRoute: typeof CctvRoute
   ContactRoute: typeof ContactRoute
   HealthcareRoute: typeof HealthcareRoute
+  KnowledgeRoute: typeof KnowledgeRoute
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge': {
+      id: '/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/healthcare': {
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   CctvRoute: CctvRoute,
   ContactRoute: ContactRoute,
   HealthcareRoute: HealthcareRoute,
+  KnowledgeRoute: KnowledgeRoute,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
@@ -229,13 +250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
