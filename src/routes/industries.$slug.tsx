@@ -9,9 +9,7 @@ import { industries, type Industry } from "@/lib/industries-data";
 import { services } from "@/lib/services-data";
 import { caseStudies } from "@/lib/case-studies-data";
 import { resolveImage } from "@/lib/asset-map";
-import { pageMeta, canonical, ldScript, breadcrumbSchema, serviceSchema, breadcrumbSchema as bc } from "@/lib/seo";
-
-void bc;
+import { pageMeta, canonical, ldScript, breadcrumbSchema, serviceSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/industries/$slug")({
   loader: ({ params }) => {

@@ -20,7 +20,9 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as KnowledgeIndexRouteImport } from './routes/knowledge.index'
 import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
+import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
 import { Route as KnowledgeSlugRouteImport } from './routes/knowledge.$slug'
+import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 
 const SolarRoute = SolarRouteImport.update({
   id: '/solar',
@@ -77,9 +79,19 @@ const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
   path: '/industries/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseStudiesIndexRoute = CaseStudiesIndexRouteImport.update({
+  id: '/case-studies/',
+  path: '/case-studies/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KnowledgeSlugRoute = KnowledgeSlugRouteImport.update({
   id: '/knowledge/$slug',
   path: '/knowledge/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
+  id: '/industries/$slug',
+  path: '/industries/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -93,7 +105,9 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/case-studies/': typeof CaseStudiesIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/knowledge/': typeof KnowledgeIndexRoute
 }
@@ -107,7 +121,9 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/case-studies': typeof CaseStudiesIndexRoute
   '/industries': typeof IndustriesIndexRoute
   '/knowledge': typeof KnowledgeIndexRoute
 }
@@ -122,7 +138,9 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/knowledge/$slug': typeof KnowledgeSlugRoute
+  '/case-studies/': typeof CaseStudiesIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/knowledge/': typeof KnowledgeIndexRoute
 }
@@ -138,7 +156,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/industries/$slug'
     | '/knowledge/$slug'
+    | '/case-studies/'
     | '/industries/'
     | '/knowledge/'
   fileRoutesByTo: FileRoutesByTo
@@ -152,7 +172,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/industries/$slug'
     | '/knowledge/$slug'
+    | '/case-studies'
     | '/industries'
     | '/knowledge'
   id:
@@ -166,7 +188,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/industries/$slug'
     | '/knowledge/$slug'
+    | '/case-studies/'
     | '/industries/'
     | '/knowledge/'
   fileRoutesById: FileRoutesById
@@ -181,7 +205,9 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
+  IndustriesSlugRoute: typeof IndustriesSlugRoute
   KnowledgeSlugRoute: typeof KnowledgeSlugRoute
+  CaseStudiesIndexRoute: typeof CaseStudiesIndexRoute
   IndustriesIndexRoute: typeof IndustriesIndexRoute
   KnowledgeIndexRoute: typeof KnowledgeIndexRoute
 }
@@ -265,11 +291,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndustriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/case-studies/': {
+      id: '/case-studies/'
+      path: '/case-studies'
+      fullPath: '/case-studies/'
+      preLoaderRoute: typeof CaseStudiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/knowledge/$slug': {
       id: '/knowledge/$slug'
       path: '/knowledge/$slug'
       fullPath: '/knowledge/$slug'
       preLoaderRoute: typeof KnowledgeSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/$slug': {
+      id: '/industries/$slug'
+      path: '/industries/$slug'
+      fullPath: '/industries/$slug'
+      preLoaderRoute: typeof IndustriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -285,7 +325,9 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
+  IndustriesSlugRoute: IndustriesSlugRoute,
   KnowledgeSlugRoute: KnowledgeSlugRoute,
+  CaseStudiesIndexRoute: CaseStudiesIndexRoute,
   IndustriesIndexRoute: IndustriesIndexRoute,
   KnowledgeIndexRoute: KnowledgeIndexRoute,
 }
