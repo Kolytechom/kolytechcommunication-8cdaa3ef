@@ -1,10 +1,11 @@
 import { pageMeta, canonical, ldScript, webPageSchema, breadcrumbSchema, localBusinessSchema } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard } from "@/components/marketing";
 import { KolyAssistCTA } from "@/components/kolyassist";
+import { readHandoff, type Handoff } from "@/components/kolyassist/report";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -34,6 +35,12 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [handoff, setHandoff] = useState<Handoff | null>(null);
+
+  /* Carries a completed KolyAssist consultation into the enquiry. */
+  useEffect(() => {
+    setHandoff(readHandoff());
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -118,12 +125,23 @@ function ContactPage() {
                 }}
                 className="grid gap-4"
               >
+                {handoff && (
+                  <div className="rounded-2xl border border-brand-orange/40 bg-card p-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-orange">
+                      KolyAssist consultation {handoff.reference}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      We've pre-filled your details and attached your consultation summary so you
+                      don't have to repeat yourself.
+                    </p>
+                  </div>
+                )}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Full name" name="name" required />
-                  <Field label="Email" name="email" type="email" required />
+                  <Field label="Full name" name="name" required defaultValue={handoff?.name} />
+                  <Field label="Email" name="email" type="email" required defaultValue={handoff?.email} />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Phone" name="phone" type="tel" />
+                  <Field label="Phone" name="phone" type="tel" defaultValue={handoff?.phone} />
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Interest
@@ -149,6 +167,8 @@ function ContactPage() {
                     name="message"
                     rows={5}
                     className="form-field mt-1.5"
+                    defaultValue={handoff?.summary ?? ""}
+                    key={handoff?.reference ?? "blank"}
                     placeholder="Tell us about your site and what you'd like to achieve."
                   />
 
@@ -175,11 +195,13 @@ function Field({
   name,
   type = "text",
   required,
+  defaultValue,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  defaultValue?: string;
 }) {
   return (
     <div>
@@ -190,6 +212,8 @@ function Field({
         name={name}
         type={type}
         required={required}
+        defaultValue={defaultValue}
+        key={defaultValue ?? "empty"}
         className="form-field mt-1.5"
       />
 

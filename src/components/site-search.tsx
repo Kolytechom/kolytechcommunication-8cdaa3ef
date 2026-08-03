@@ -2,6 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
 import { services } from "@/lib/services-data";
+import { knowledgeArticles } from "@/lib/knowledge-data";
+import { industries } from "@/lib/industries-data";
+import { caseStudies } from "@/lib/case-studies-data";
 
 type Result = { title: string; description: string; to: string; category: string };
 
@@ -54,7 +57,25 @@ export function SiteSearch() {
         s.slug === "healthcare" ? "/healthcare" : "/services",
       category: "Service",
     }));
-    return [...PAGES, ...svc, ...FAQS];
+    const guides: Result[] = knowledgeArticles.map((a) => ({
+      title: a.title,
+      description: a.summary,
+      to: `/knowledge/${a.slug}`,
+      category: "Guide",
+    }));
+    const sectors: Result[] = industries.map((i) => ({
+      title: `${i.name} solutions`,
+      description: i.intro,
+      to: `/industries/${i.slug}`,
+      category: "Industry",
+    }));
+    const stories: Result[] = caseStudies.map((c) => ({
+      title: c.title,
+      description: c.summary,
+      to: `/case-studies/${c.slug}`,
+      category: "Case study",
+    }));
+    return [...PAGES, ...svc, ...guides, ...sectors, ...stories, ...FAQS];
   }, []);
 
   const results = useMemo(() => {
@@ -113,7 +134,7 @@ export function SiteSearch() {
                 ref={inputRef}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search services, pages, FAQs…"
+                placeholder="Search services, guides, industries, case studies…"
                 className="flex-1 bg-transparent py-4 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 aria-label="Search"
               />
