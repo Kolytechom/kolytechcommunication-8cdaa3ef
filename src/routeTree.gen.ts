@@ -12,13 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolarRouteImport } from './routes/solar'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as HealthcareRouteImport } from './routes/healthcare'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CctvRouteImport } from './routes/cctv'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KnowledgeIndexRouteImport } from './routes/knowledge.index'
 
 const SolarRoute = SolarRouteImport.update({
   id: '/solar',
@@ -33,11 +33,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgeRoute = KnowledgeRouteImport.update({
-  id: '/knowledge',
-  path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthcareRoute = HealthcareRouteImport.update({
@@ -70,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KnowledgeIndexRoute = KnowledgeIndexRouteImport.update({
+  id: '/knowledge/',
+  path: '/knowledge/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,10 +78,10 @@ export interface FileRoutesByFullPath {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
-  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge/': typeof KnowledgeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -90,10 +90,10 @@ export interface FileRoutesByTo {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
-  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge': typeof KnowledgeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,10 +103,10 @@ export interface FileRoutesById {
   '/cctv': typeof CctvRoute
   '/contact': typeof ContactRoute
   '/healthcare': typeof HealthcareRoute
-  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar': typeof SolarRoute
+  '/knowledge/': typeof KnowledgeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,10 +117,10 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
-    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -129,10 +129,10 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
-    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge'
   id:
     | '__root__'
     | '/'
@@ -141,10 +141,10 @@ export interface FileRouteTypes {
     | '/cctv'
     | '/contact'
     | '/healthcare'
-    | '/knowledge'
     | '/services'
     | '/sitemap.xml'
     | '/solar'
+    | '/knowledge/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -154,10 +154,10 @@ export interface RootRouteChildren {
   CctvRoute: typeof CctvRoute
   ContactRoute: typeof ContactRoute
   HealthcareRoute: typeof HealthcareRoute
-  KnowledgeRoute: typeof KnowledgeRoute
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarRoute: typeof SolarRoute
+  KnowledgeIndexRoute: typeof KnowledgeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -181,13 +181,6 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge': {
-      id: '/knowledge'
-      path: '/knowledge'
-      fullPath: '/knowledge'
-      preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/healthcare': {
@@ -232,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/knowledge/': {
+      id: '/knowledge/'
+      path: '/knowledge'
+      fullPath: '/knowledge/'
+      preLoaderRoute: typeof KnowledgeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -242,10 +242,10 @@ const rootRouteChildren: RootRouteChildren = {
   CctvRoute: CctvRoute,
   ContactRoute: ContactRoute,
   HealthcareRoute: HealthcareRoute,
-  KnowledgeRoute: KnowledgeRoute,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarRoute: SolarRoute,
+  KnowledgeIndexRoute: KnowledgeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
