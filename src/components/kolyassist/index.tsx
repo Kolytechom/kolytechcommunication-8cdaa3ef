@@ -31,6 +31,7 @@ import {
   type QuestionDef,
 } from "./data";
 import { buildRecommendation, type ConsultationContext } from "./intelligence";
+import { ExecutiveSummary } from "./executive";
 import { EASE } from "@/lib/motion";
 
 const STORAGE_KEY = "kolyassist_session_v3";
@@ -636,6 +637,17 @@ function KolyAssistPanel() {
                             {recommendation.estimate}
                           </p>
                         </ResultBlock>
+
+                        <ExecutiveSummary
+                          contact={{
+                            name: answers.name,
+                            email: answers.email,
+                            phone: answers.phone,
+                            company: answers.company,
+                          }}
+                          ctx={ctx}
+                          rec={recommendation}
+                        />
 
                         <ResultBlock title="Recommended next step">
                           <p className="text-sm text-muted-foreground">{recommendation.nextStep}</p>

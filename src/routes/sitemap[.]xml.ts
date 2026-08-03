@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { industries } from "@/lib/industries-data";
+import { knowledgeArticles } from "@/lib/knowledge-data";
+import { caseStudies } from "@/lib/case-studies-data";
 
 const BASE_URL = "https://koytechcommunications.lovable.app";
 
@@ -16,6 +19,24 @@ const entries: SitemapEntry[] = [
   { path: "/cctv", changefreq: "monthly", priority: "0.8" },
   { path: "/solar", changefreq: "monthly", priority: "0.8" },
   { path: "/healthcare", changefreq: "monthly", priority: "0.8" },
+  { path: "/industries", changefreq: "monthly", priority: "0.8" },
+  ...industries.map((i) => ({
+    path: `/industries/${i.slug}`,
+    changefreq: "monthly" as const,
+    priority: "0.7",
+  })),
+  { path: "/knowledge", changefreq: "weekly", priority: "0.8" },
+  ...knowledgeArticles.map((a) => ({
+    path: `/knowledge/${a.slug}`,
+    changefreq: "monthly" as const,
+    priority: "0.6",
+  })),
+  { path: "/case-studies", changefreq: "monthly", priority: "0.8" },
+  ...caseStudies.map((c) => ({
+    path: `/case-studies/${c.slug}`,
+    changefreq: "yearly" as const,
+    priority: "0.6",
+  })),
   { path: "/about", changefreq: "yearly", priority: "0.6" },
   { path: "/contact", changefreq: "yearly", priority: "0.7" },
 ];
