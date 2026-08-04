@@ -669,46 +669,55 @@ function KolyAssistPanel() {
                           </p>
                         </ResultBlock>
 
-                        <ExecutiveSummary
-                          contact={{
-                            name: answers.name,
-                            email: answers.email,
-                            phone: answers.phone,
-                            company: answers.company,
-                          }}
-                          ctx={ctx}
-                          rec={recommendation}
-                        />
+                        {report && <ExecutiveSummary payload={report} />}
 
                         <ResultBlock title="Recommended next step">
                           <p className="text-sm text-muted-foreground">{recommendation.nextStep}</p>
                           <div className="mt-4 grid gap-2 sm:grid-cols-2">
                             <ActionButton
-                              href="tel:+2348139135880"
+                              href={`tel:${CONTACT_PHONE}`}
                               icon={Phone}
                               label="Request a Call"
                             />
                             <ActionButton
-                              href={whatsappLink(answers.name, recommendation.industry.label)}
+                              href={report ? whatsappUrl(report) : "#"}
                               icon={MessageCircle}
                               label="Continue on WhatsApp"
                               external
                             />
                             <Link
                               to="/contact"
-                              onClick={closeAssist}
+                              onClick={() => {
+                                if (report) saveHandoff(report, "booking");
+                                closeAssist();
+                              }}
                               className="btn-press inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-orange"
                             >
                               <Calendar className="h-4 w-4" /> Book Consultation
                             </Link>
+                            <Link
+                              to="/contact"
+                              onClick={() => {
+                                if (report) saveHandoff(report, "proposal");
+                                closeAssist();
+                              }}
+                              className="btn-press inline-flex items-center justify-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary"
+                            >
+                              <FileSignature className="h-4 w-4 text-brand-orange" aria-hidden />
+                              Request Proposal
+                            </Link>
                             <ActionButton
-                              href={`mailto:kolytechcom@yahoo.com?subject=${encodeURIComponent(
-                                `KolyAssist consultation — ${recommendation.industry.label}`,
-                              )}`}
+                              href={report ? mailtoUrl(report) : "#"}
                               icon={Mail}
-                              label="Send Email"
+                              label="Email the report"
                             />
                           </div>
+                          <p className="mt-3 text-[11px] text-muted-foreground">
+                            Every option above carries the same consultation
+                            {report ? ` (${report.reference})` : ""} — you never have to repeat
+                            yourself.
+                          </p>
+
                           <button
                             type="button"
                             onClick={reset}
