@@ -297,13 +297,109 @@ export function reportText(p: ReportPayload): string {
     .join("\n");
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Continuation channels — all derived from the same ReportPayload            */
+/* -------------------------------------------------------------------------- */
+
+export type HandoffIntent = "enquiry" | "booking" | "proposal";
+
+export const CONTACT_PHONE = "+2348139135880";
+export const CONTACT_EMAIL = "kolytechcom@yahoo.com";
+
+/** Condensed profile lines shared by WhatsApp, email and the proposal payload. */
+export function profileLines(p: ReportPayload): string[] {
+  const { ctx, rec, contact } = p;
+  const line = (label: string, value: string) => (value ? `${label}: ${value}` : "");
+  return [
+    line("Reference", p.reference),
+    line("Client", contact.name),
+    line("Organisation", contact.company),
+    line("Industry", rec.industry.label),
+    line("Locations", ctx.scale ? labelForAnswer("scale", ctx.scale) : ""),
+    line("Timeline preference", ctx.timeline ? labelForAnswer("timeline", ctx.timeline) : ""),
+    line(
+      "Business objectives",
+      ctx.objectives.map((o) => labelForAnswer("objective", o)).join(", "),
+    ),
+    line(
+      "Current situation",
+      ctx.maturity ? labelForAnswer("maturity", ctx.maturity) : "",
+    ),
+    line("Project driver", ctx.driver ? labelForAnswer("driver", ctx.driver) : ""),
+    line("Budget position", ctx.budget ? labelForAnswer("budget", ctx.budget) : ""),
+    line("Selected services", ctx.needs.map(labelForNeed).join(", ")),
+  ].filter(Boolean);
+}
+
+/** Professional WhatsApp handoff carrying the full consultation. */
+export function whatsappMessage(p: ReportPayload): string {
+  const sections = [
+    "*KolyAssist Consultation Summary*",
+    "Kolytech Communication — IT Infrastructure, AI & Digital Solutions",
+    "",
+    profileLines(p).join("\n"),
+    "",
+    "*Recommended solutions*",
+    p.rec.solutions.map((s) => `• ${s.title} — ${s.short}`).join("\n"),
+    "",
+    `*Confidence score:* ${p.rec.confidenceScore}%`,
+    "",
+    "*Investment guidance*",
+    p.investment,
+    "",
+    "*Business value projection*",
+    p.value.map((v) => `• ${v}`).join("\n"),
+    "",
+    "*Implementation roadmap*",
+    p.rec.order.map((o) => `• ${o.phase}: ${o.service.title}`).join("\n"),
+    "",
+    `*Estimated timeline:* ${p.rec.estimate}`,
+    "",
+    `*Recommended next action:* ${p.rec.nextStep}`,
+  ];
+  return sections.join("\n");
+}
+
+export function whatsappUrl(p: ReportPayload): string {
+  return `https://wa.me/2348139135880?text=${encodeURIComponent(whatsappMessage(p))}`;
+}
+
+export function emailSubject(p: ReportPayload): string {
+  return `KolyAssist Consultation Report - ${p.reference}`;
+}
+
+/** mailto fallback — trimmed so it stays inside client mail-client URL limits. */
+export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
+  const body = reportText(p).slice(0, 1800);
+  return `mailto:${to}?subject=${encodeURIComponent(emailSubject(p))}&body=${encodeURIComponent(body)}`;
+}
+
+/** Proposal-ready payload — the same canonical object, flattened for handoff. */
+export function proposalPayload(p: ReportPayload) {
+  return {
+    reference: p.reference,
+    issued: p.date,
+    client: p.contact,
+    industry: p.rec.industry.label,
+    objectives: p.ctx.objectives.map((o) => labelForAnswer("objective", o)),
+    selectedServices: p.ctx.needs.map(labelForNeed),
+    recommendations: p.rec.solutions.map((s) => ({ title: s.title, summary: s.short })),
+    roadmap: p.rec.order.map((o) => ({ phase: o.phase, service: o.service.title, note: o.note })),
+    investment: p.investment,
+    valueProjection: p.value,
+    timeline: p.rec.estimate,
+    confidenceScore: p.rec.confidenceScore,
+  };
+}
+
 /** Stored so /contact can pre-fill with consultation context. */
-export function saveHandoff(p: ReportPayload) {
+export function saveHandoff(p: ReportPayload, intent: HandoffIntent = "enquiry") {
   try {
     localStorage.setItem(
       HANDOFF_KEY,
       JSON.stringify({
         reference: p.reference,
+        intent,
         name: p.contact.name,
         email: p.contact.email,
         phone: p.contact.phone,
@@ -311,8 +407,9 @@ export function saveHandoff(p: ReportPayload) {
         industry: p.rec.industry.label,
         interest: p.rec.solutions[0]?.title ?? "",
         summary: reportText(p),
+        proposal: proposalPayload(p),
         savedAt: Date.now(),
-      }),
+      } satisfies Handoff),
     );
   } catch {
     /* storage unavailable — the panel still works */
@@ -321,6 +418,7 @@ export function saveHandoff(p: ReportPayload) {
 
 export type Handoff = {
   reference: string;
+  intent: HandoffIntent;
   name: string;
   email: string;
   phone: string;
@@ -328,8 +426,10 @@ export type Handoff = {
   industry: string;
   interest: string;
   summary: string;
+  proposal: ReturnType<typeof proposalPayload>;
   savedAt: number;
 };
+
 
 export function readHandoff(): Handoff | null {
   try {
