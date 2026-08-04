@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Calendar,
   Check,
+  FileSignature,
   Loader2,
   Mail,
   MessageCircle,
@@ -32,6 +33,15 @@ import {
 } from "./data";
 import { buildRecommendation, type ConsultationContext } from "./intelligence";
 import { ExecutiveSummary } from "./executive";
+import {
+  CONTACT_PHONE,
+  buildPayload,
+  clearSessionReference,
+  mailtoUrl,
+  saveHandoff,
+  sessionReference,
+  whatsappUrl,
+} from "./report";
 import { EASE } from "@/lib/motion";
 
 const STORAGE_KEY = "kolyassist_session_v3";
@@ -175,6 +185,7 @@ function useSession() {
       localStorage.removeItem(STORAGE_KEY);
       LEGACY_KEYS.forEach((k) => localStorage.removeItem(k));
     } catch {}
+    clearSessionReference();
   }, []);
 
   return { step, setStep, answers, setAnswers, reset };
@@ -258,6 +269,43 @@ function KolyAssistPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(ctx)],
   );
+
+  /* ---- Canonical consultation report: one object, every channel ---- */
+  const [reference, setReference] = useState("");
+  useEffect(() => {
+    setReference(sessionReference());
+  }, []);
+
+  const report = useMemo(
+    () =>
+      recommendation && reference
+        ? buildPayload(
+            reference,
+            {
+              name: answers.name,
+              email: answers.email,
+              phone: answers.phone,
+              company: answers.company,
+            },
+            ctx,
+            recommendation,
+          )
+        : null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reference, recommendation, JSON.stringify(ctx), answers.name, answers.email, answers.phone, answers.company],
+  );
+
+  /* A fresh consultation gets a fresh reference. */
+  const startOver = useCallback(() => {
+    reset();
+    setReference(sessionReference());
+  }, [reset]);
+
+  /* Persist the same object for the contact form / booking / proposal handoff. */
+  useEffect(() => {
+    if (report && safeStep === RESULT_STEP) saveHandoff(report);
+  }, [report, safeStep, RESULT_STEP]);
+
 
   /* Brief "analysing" state whenever the result step is reached. */
   const [analysing, setAnalysing] = useState(false);
@@ -638,49 +686,58 @@ function KolyAssistPanel() {
                           </p>
                         </ResultBlock>
 
-                        <ExecutiveSummary
-                          contact={{
-                            name: answers.name,
-                            email: answers.email,
-                            phone: answers.phone,
-                            company: answers.company,
-                          }}
-                          ctx={ctx}
-                          rec={recommendation}
-                        />
+                        {report && <ExecutiveSummary payload={report} />}
 
                         <ResultBlock title="Recommended next step">
                           <p className="text-sm text-muted-foreground">{recommendation.nextStep}</p>
                           <div className="mt-4 grid gap-2 sm:grid-cols-2">
                             <ActionButton
-                              href="tel:+2348139135880"
+                              href={`tel:${CONTACT_PHONE}`}
                               icon={Phone}
                               label="Request a Call"
                             />
                             <ActionButton
-                              href={whatsappLink(answers.name, recommendation.industry.label)}
+                              href={report ? whatsappUrl(report) : "#"}
                               icon={MessageCircle}
                               label="Continue on WhatsApp"
                               external
                             />
                             <Link
                               to="/contact"
-                              onClick={closeAssist}
+                              onClick={() => {
+                                if (report) saveHandoff(report, "booking");
+                                closeAssist();
+                              }}
                               className="btn-press inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-glow-orange"
                             >
                               <Calendar className="h-4 w-4" /> Book Consultation
                             </Link>
+                            <Link
+                              to="/contact"
+                              onClick={() => {
+                                if (report) saveHandoff(report, "proposal");
+                                closeAssist();
+                              }}
+                              className="btn-press inline-flex items-center justify-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary"
+                            >
+                              <FileSignature className="h-4 w-4 text-brand-orange" aria-hidden />
+                              Request Proposal
+                            </Link>
                             <ActionButton
-                              href={`mailto:kolytechcom@yahoo.com?subject=${encodeURIComponent(
-                                `KolyAssist consultation — ${recommendation.industry.label}`,
-                              )}`}
+                              href={report ? mailtoUrl(report) : "#"}
                               icon={Mail}
-                              label="Send Email"
+                              label="Email the report"
                             />
                           </div>
+                          <p className="mt-3 text-[11px] text-muted-foreground">
+                            Every option above carries the same consultation
+                            {report ? ` (${report.reference})` : ""} — you never have to repeat
+                            yourself.
+                          </p>
+
                           <button
                             type="button"
-                            onClick={reset}
+                            onClick={startOver}
                             className="btn-press mt-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                           >
                             Start over
@@ -806,12 +863,6 @@ function ActionButton({
   );
 }
 
-function whatsappLink(name: string, industry: string) {
-  const text = `Hello Kolytech Communication. I just completed a KolyAssist consultation${
-    name ? ` (${name})` : ""
-  } for a ${industry.toLowerCase()} organisation and would like to discuss the recommendation.`;
-  return `https://wa.me/2348139135880?text=${encodeURIComponent(text)}`;
-}
 
 
 function Question({

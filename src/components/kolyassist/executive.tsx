@@ -1,18 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, FileText, Loader2 } from "lucide-react";
 import { EASE } from "@/lib/motion";
-import type { ConsultationContext, Recommendation } from "./intelligence";
-import {
-  NEXT_ACTIONS,
-  buildPayload,
-  makeReference,
-  reportBlocks,
-  reportText,
-  saveHandoff,
-  type Contact,
-  type ReportPayload,
-} from "./report";
+import { NEXT_ACTIONS, reportBlocks, type ReportPayload } from "./report";
+
 
 function download(blob: Blob, filename: string) {
   const href = URL.createObjectURL(blob);
@@ -140,28 +131,10 @@ async function exportDocx(p: ReportPayload) {
   download(blob, `Kolytech-Consultation-${p.reference}.docx`);
 }
 
-export function ExecutiveSummary({
-  contact,
-  ctx,
-  rec,
-}: {
-  contact: Contact;
-  ctx: ConsultationContext;
-  rec: Recommendation;
-}) {
-  const [reference] = useState(() => makeReference());
+/** Renders the canonical ReportPayload — it never builds its own copy. */
+export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
   const [busy, setBusy] = useState<"pdf" | "docx" | null>(null);
-
-  const payload = useMemo(
-    () => buildPayload(reference, contact, ctx, rec),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reference, JSON.stringify(contact), JSON.stringify(ctx), rec.industry.id, rec.confidenceScore],
-  );
-
-  /* Carry the consultation forward to the contact form and email/WhatsApp. */
-  useEffect(() => {
-    saveHandoff(payload);
-  }, [payload]);
+  const reference = payload.reference;
 
   const run = async (kind: "pdf" | "docx") => {
     setBusy(kind);
@@ -172,6 +145,7 @@ export function ExecutiveSummary({
       setBusy(null);
     }
   };
+
 
   return (
     <>
@@ -253,14 +227,11 @@ export function ExecutiveSummary({
             onClick={() => run("docx")}
           />
         </div>
-        <a
-          href={`mailto:kolytechcom@yahoo.com?subject=${encodeURIComponent(
-            `KolyAssist consultation ${reference}`,
-          )}&body=${encodeURIComponent(reportText(payload).slice(0, 1800))}`}
-          className="mt-2 inline-flex text-xs font-semibold text-brand-orange hover:underline"
-        >
-          Email this summary to Kolytech
-        </a>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          Both files carry reference {reference} — the same summary we receive through WhatsApp,
+          email or the enquiry form.
+        </p>
+
       </Block>
     </>
   );
