@@ -140,28 +140,10 @@ async function exportDocx(p: ReportPayload) {
   download(blob, `Kolytech-Consultation-${p.reference}.docx`);
 }
 
-export function ExecutiveSummary({
-  contact,
-  ctx,
-  rec,
-}: {
-  contact: Contact;
-  ctx: ConsultationContext;
-  rec: Recommendation;
-}) {
-  const [reference] = useState(() => makeReference());
+/** Renders the canonical ReportPayload — it never builds its own copy. */
+export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
   const [busy, setBusy] = useState<"pdf" | "docx" | null>(null);
-
-  const payload = useMemo(
-    () => buildPayload(reference, contact, ctx, rec),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reference, JSON.stringify(contact), JSON.stringify(ctx), rec.industry.id, rec.confidenceScore],
-  );
-
-  /* Carry the consultation forward to the contact form and email/WhatsApp. */
-  useEffect(() => {
-    saveHandoff(payload);
-  }, [payload]);
+  const reference = payload.reference;
 
   const run = async (kind: "pdf" | "docx") => {
     setBusy(kind);
@@ -172,6 +154,7 @@ export function ExecutiveSummary({
       setBusy(null);
     }
   };
+
 
   return (
     <>
