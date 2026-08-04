@@ -4,9 +4,10 @@
  * PDF/DOCX exports and the contact-form handoff.
  */
 import type { Recommendation, ConsultationContext } from "./intelligence";
-import { labelForNeed } from "./data";
+import { labelForNeed, labelForAnswer } from "./data";
 
 export const HANDOFF_KEY = "kolyassist_handoff_v1";
+const REFERENCE_KEY = "kolyassist_reference_v1";
 
 /** KTC-YYYYMMDD-XXXXX — stable for the lifetime of a session. */
 export function makeReference(date = new Date()): string {
@@ -18,6 +19,31 @@ export function makeReference(date = new Date()): string {
     .padStart(5, "0");
   return `KTC-${y}${m}${d}-${rand}`;
 }
+
+/**
+ * One reference per consultation session, shared by every output channel so a
+ * reopened panel, an export and a WhatsApp handoff all quote the same number.
+ */
+export function sessionReference(): string {
+  try {
+    const existing = localStorage.getItem(REFERENCE_KEY);
+    if (existing) return existing;
+    const next = makeReference();
+    localStorage.setItem(REFERENCE_KEY, next);
+    return next;
+  } catch {
+    return makeReference();
+  }
+}
+
+export function clearSessionReference() {
+  try {
+    localStorage.removeItem(REFERENCE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 
 export type Contact = {
   name: string;
