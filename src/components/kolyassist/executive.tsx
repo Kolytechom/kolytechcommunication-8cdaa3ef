@@ -227,14 +227,11 @@ export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
             onClick={() => run("docx")}
           />
         </div>
-        <a
-          href={`mailto:kolytechcom@yahoo.com?subject=${encodeURIComponent(
-            `KolyAssist consultation ${reference}`,
-          )}&body=${encodeURIComponent(reportText(payload).slice(0, 1800))}`}
-          className="mt-2 inline-flex text-xs font-semibold text-brand-orange hover:underline"
-        >
-          Email this summary to Kolytech
-        </a>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          Both files carry reference {reference} — the same summary we receive through WhatsApp,
+          email or the enquiry form.
+        </p>
+
       </Block>
     </>
   );
