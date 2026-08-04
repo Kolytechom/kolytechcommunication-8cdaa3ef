@@ -1,18 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, FileText, Loader2 } from "lucide-react";
 import { EASE } from "@/lib/motion";
-import type { ConsultationContext, Recommendation } from "./intelligence";
-import {
-  NEXT_ACTIONS,
-  buildPayload,
-  makeReference,
-  reportBlocks,
-  reportText,
-  saveHandoff,
-  type Contact,
-  type ReportPayload,
-} from "./report";
+import { NEXT_ACTIONS, reportBlocks, type ReportPayload } from "./report";
+
 
 function download(blob: Blob, filename: string) {
   const href = URL.createObjectURL(blob);
