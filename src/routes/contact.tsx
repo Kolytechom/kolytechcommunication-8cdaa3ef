@@ -5,7 +5,15 @@ import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 import { GlassCard } from "@/components/marketing";
 import { KolyAssistCTA } from "@/components/kolyassist";
-import { readHandoff, type Handoff } from "@/components/kolyassist/report";
+import { readHandoff, clearHandoff, type Handoff } from "@/components/kolyassist/report";
+
+const INTEREST_OPTIONS: string[] = [
+  "Enterprise IT",
+  "AI Solutions & Digital Innovation",
+  "CCTV & Security",
+  "Solar Installation",
+  "Healthcare IT",
+];
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
