@@ -185,6 +185,7 @@ function useSession() {
       localStorage.removeItem(STORAGE_KEY);
       LEGACY_KEYS.forEach((k) => localStorage.removeItem(k));
     } catch {}
+    clearSessionReference();
   }, []);
 
   return { step, setStep, answers, setAnswers, reset };
@@ -293,6 +294,12 @@ function KolyAssistPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [reference, recommendation, JSON.stringify(ctx), answers.name, answers.email, answers.phone, answers.company],
   );
+
+  /* A fresh consultation gets a fresh reference. */
+  const startOver = useCallback(() => {
+    reset();
+    setReference(sessionReference());
+  }, [reset]);
 
   /* Persist the same object for the contact form / booking / proposal handoff. */
   useEffect(() => {
@@ -730,7 +737,7 @@ function KolyAssistPanel() {
 
                           <button
                             type="button"
-                            onClick={reset}
+                            onClick={startOver}
                             className="btn-press mt-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                           >
                             Start over
