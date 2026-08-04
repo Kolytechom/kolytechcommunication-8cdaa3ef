@@ -121,6 +121,7 @@ function ContactPage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  clearHandoff();
                   setSent(true);
                 }}
                 className="grid gap-4"
@@ -128,11 +129,19 @@ function ContactPage() {
                 {handoff && (
                   <div className="rounded-2xl border border-brand-orange/40 bg-card p-4">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-orange">
-                      KolyAssist consultation {handoff.reference}
+                      {handoff.intent === "booking"
+                        ? "Consultation booking"
+                        : handoff.intent === "proposal"
+                          ? "Proposal request"
+                          : "KolyAssist consultation"}{" "}
+                      {handoff.reference}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      We've pre-filled your details and attached your consultation summary so you
-                      don't have to repeat yourself.
+                      {handoff.intent === "proposal"
+                        ? "Your recommendations, timeline and investment guidance are attached — we'll turn them straight into a costed proposal."
+                        : handoff.intent === "booking"
+                          ? "Your full consultation is attached, so we can go straight to scheduling your site assessment."
+                          : "We've pre-filled your details and attached your consultation summary so you don't have to repeat yourself."}
                     </p>
                   </div>
                 )}
@@ -149,16 +158,20 @@ function ContactPage() {
                     <select
                       name="interest"
                       className="form-field mt-1.5"
+                      key={handoff?.interest ?? "none"}
+                      defaultValue={
+                        INTEREST_OPTIONS.find((o) => handoff?.interest?.includes(o.split(" ")[0])) ??
+                        INTEREST_OPTIONS[0]
+                      }
                     >
-                      <option>Enterprise IT</option>
-                      <option>AI Solutions & Digital Innovation</option>
-                      <option>CCTV & Security</option>
-                      <option>Solar Installation</option>
-                      <option>Healthcare IT</option>
+                      {INTEREST_OPTIONS.map((o) => (
+                        <option key={o}>{o}</option>
+                      ))}
                     </select>
 
                   </div>
                 </div>
+
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Project details
