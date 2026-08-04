@@ -259,6 +259,37 @@ function KolyAssistPanel() {
     [JSON.stringify(ctx)],
   );
 
+  /* ---- Canonical consultation report: one object, every channel ---- */
+  const [reference, setReference] = useState("");
+  useEffect(() => {
+    setReference(sessionReference());
+  }, []);
+
+  const report = useMemo(
+    () =>
+      recommendation && reference
+        ? buildPayload(
+            reference,
+            {
+              name: answers.name,
+              email: answers.email,
+              phone: answers.phone,
+              company: answers.company,
+            },
+            ctx,
+            recommendation,
+          )
+        : null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reference, recommendation, JSON.stringify(ctx), answers.name, answers.email, answers.phone, answers.company],
+  );
+
+  /* Persist the same object for the contact form / booking / proposal handoff. */
+  useEffect(() => {
+    if (report && safeStep === RESULT_STEP) saveHandoff(report);
+  }, [report, safeStep, RESULT_STEP]);
+
+
   /* Brief "analysing" state whenever the result step is reached. */
   const [analysing, setAnalysing] = useState(false);
   useEffect(() => {
