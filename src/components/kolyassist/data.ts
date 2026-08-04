@@ -383,3 +383,9 @@ export function labelForOption(question: QuestionDef, optionId: string) {
 
 /* --------------------------- Recommendation helpers -------------------------- */
 /* The recommendation engine now lives in ./intelligence.ts — no duplicate logic here. */
+
+/** Human label for a shared-question answer id (organisation, scale, driver…). */
+export function labelForAnswer(questionId: string, optionId: string) {
+  const question = SHARED[questionId];
+  return question ? labelForOption(question, optionId) : optionId;
+}
