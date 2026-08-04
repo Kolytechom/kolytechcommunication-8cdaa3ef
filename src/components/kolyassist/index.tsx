@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Calendar,
   Check,
+  FileSignature,
   Loader2,
   Mail,
   MessageCircle,
@@ -32,6 +33,15 @@ import {
 } from "./data";
 import { buildRecommendation, type ConsultationContext } from "./intelligence";
 import { ExecutiveSummary } from "./executive";
+import {
+  CONTACT_PHONE,
+  buildPayload,
+  clearSessionReference,
+  mailtoUrl,
+  saveHandoff,
+  sessionReference,
+  whatsappUrl,
+} from "./report";
 import { EASE } from "@/lib/motion";
 
 const STORAGE_KEY = "kolyassist_session_v3";
@@ -846,12 +856,6 @@ function ActionButton({
   );
 }
 
-function whatsappLink(name: string, industry: string) {
-  const text = `Hello Kolytech Communication. I just completed a KolyAssist consultation${
-    name ? ` (${name})` : ""
-  } for a ${industry.toLowerCase()} organisation and would like to discuss the recommendation.`;
-  return `https://wa.me/2348139135880?text=${encodeURIComponent(text)}`;
-}
 
 
 function Question({
