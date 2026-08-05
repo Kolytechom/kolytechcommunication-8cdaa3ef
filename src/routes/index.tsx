@@ -317,38 +317,46 @@ function FeatureSplit() {
 
 function Process() {
   const steps = [
-    { icon: Search, title: "Assess", body: "On-site survey, load audit and requirements capture with your team." },
-    { icon: PenTool, title: "Design", body: "Detailed drawings, BOQ and a documented rollout plan you can approve." },
-    { icon: Wrench, title: "Deploy", body: "Clean installation by certified engineers with commissioning and testing." },
-    { icon: LifeBuoy, title: "Support", body: "Handover, training, monitoring and ongoing preventive maintenance." },
+    { icon: Compass, title: "Discover", body: "We listen first — objectives, constraints, budget position and what success looks like for your organisation." },
+    { icon: Search, title: "Assess", body: "On-site survey, load audit and requirements capture with your team. Nothing is quoted from a questionnaire alone." },
+    { icon: PenTool, title: "Design", body: "Detailed drawings, BOQ and a documented, phased rollout plan you can take to approval." },
+    { icon: Wrench, title: "Deploy", body: "Clean installation by our engineers, with commissioning, testing and handover documentation." },
+    { icon: LifeBuoy, title: "Support & Optimisation", body: "Training, monitoring, preventive maintenance and periodic reviews as your needs grow." },
   ];
   return (
     <section className="relative py-20 sm:py-28 bg-secondary/60">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="How we work"
-          title="A four-step process,"
+          eyebrow="Our delivery methodology"
+          title="A five-stage method,"
           accent="documented end-to-end."
           description="Every engagement follows the same disciplined path — no surprises, no shortcuts."
         />
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <StaggerGroup className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {steps.map((s, i) => (
-            <GlassCard key={s.title} className="relative">
-              <div className="absolute -top-3 -left-3 h-9 w-9 rounded-full bg-orange-gradient grid place-items-center text-white text-sm font-bold">
-                {i + 1}
-              </div>
-              <div className="h-11 w-11 rounded-2xl bg-brand-gradient grid place-items-center">
-                <s.icon className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="mt-4 font-bold text-primary">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
-            </GlassCard>
+            <StaggerItem
+              key={s.title}
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <GlassCard className="relative h-full">
+                <div className="absolute -top-3 -left-3 h-9 w-9 rounded-full bg-orange-gradient grid place-items-center text-white text-sm font-bold">
+                  {i + 1}
+                </div>
+                <div className="h-11 w-11 rounded-2xl bg-brand-gradient grid place-items-center">
+                  <s.icon className="h-5 w-5 text-white" aria-hidden />
+                </div>
+                <h3 className="mt-4 font-bold text-primary">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.body}</p>
+              </GlassCard>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </div>
     </section>
   );
 }
+
 
 function Industries() {
   const items = [
