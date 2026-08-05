@@ -387,11 +387,37 @@ export function emailSubject(p: ReportPayload): string {
   return `KolyAssist Consultation Report - ${p.reference}`;
 }
 
-/** mailto fallback — trimmed so it stays inside client mail-client URL limits. */
-export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
-  const body = reportText(p).slice(0, 1800);
-  return `mailto:${to}?subject=${encodeURIComponent(emailSubject(p))}&body=${encodeURIComponent(body)}`;
+/**
+ * Mail clients silently truncate long mailto URLs, which used to cut a percent
+ * escape in half and surface artifacts like "%2%7" or "%2\uFFFD" in the body.
+ * We therefore build the text first, trim it on whole *lines* (never inside a
+ * character), and percent-encode exactly once at the end.
+ */
+const MAILTO_ENCODED_BUDGET = 1800;
+
+export function emailBody(p: ReportPayload, budget = MAILTO_ENCODED_BUDGET): string {
+  const lines = reportText(p).split("\n");
+  const kept: string[] = [];
+  let used = 0;
+  for (const line of lines) {
+    const cost = encodeURIComponent(`${line}\n`).length;
+    if (used + cost > budget) {
+      kept.push("", "[Full report attached via the downloadable PDF/Word export.]");
+      break;
+    }
+    kept.push(line);
+    used += cost;
+  }
+  return kept.join("\n");
 }
+
+/** mailto — the body is encoded exactly once, on a safe line boundary. */
+export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
+  const subject = encodeURIComponent(emailSubject(p));
+  const body = encodeURIComponent(emailBody(p));
+  return `mailto:${to}?subject=${subject}&body=${body}`;
+}
+
 
 /** Proposal-ready payload — the same canonical object, flattened for handoff. */
 export function proposalPayload(p: ReportPayload) {
