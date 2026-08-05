@@ -530,7 +530,7 @@ function CTA() {
               </p>
             </div>
             <div className="flex flex-col gap-3">
-              <KolyAssistCTA variant="primary" label="✨ Launch KolyAssist" />
+              <KolyAssistCTA variant="solid" label="✨ Launch KolyAssist" />
               <Link
                 to="/contact"
                 className="btn-press inline-flex items-center justify-center gap-2 rounded-full bg-blue-gradient px-6 py-3 text-sm font-semibold text-white"
