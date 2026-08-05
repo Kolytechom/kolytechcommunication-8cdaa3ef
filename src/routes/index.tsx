@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, Sparkles, Phone, Search, PenTool, Wrench, LifeBuoy, Plus, Minus } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sparkles, Phone, Search, PenTool, Wrench, LifeBuoy, Plus, Minus, Compass } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import heroImg from "@/assets/hero-globe.jpg";
