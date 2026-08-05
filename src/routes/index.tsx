@@ -53,7 +53,9 @@ function Home() {
       <Reveal><ServicesGrid /></Reveal>
       <Reveal><FeaturedCarousel /></Reveal>
       <Reveal><FeatureSplit /></Reveal>
+      <Reveal><WhyChoose /></Reveal>
       <Reveal><Process /></Reveal>
+
       <Reveal><AnimatedStats /></Reveal>
       <Reveal><Portfolio /></Reveal>
       <Reveal><TechPartners /></Reveal>
