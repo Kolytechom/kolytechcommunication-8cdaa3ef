@@ -438,11 +438,15 @@ function FAQ() {
         <div className="mt-10 grid gap-3">
           {faqs.map((f, i) => {
             const isOpen = open === i;
+            const panelId = `faq-panel-${i}`;
             return (
               <button
                 key={f.q}
+                type="button"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="glass rounded-2xl p-5 text-left transition-all"
+                className="glass rounded-2xl p-5 text-left transition-all hover:shadow-glow-blue"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="font-semibold text-primary">{f.q}</div>
@@ -452,9 +456,9 @@ function FAQ() {
                     className="shrink-0"
                   >
                     {isOpen ? (
-                      <Minus className="h-4 w-4 text-brand-orange" />
+                      <Minus className="h-4 w-4 text-brand-orange" aria-hidden />
                     ) : (
-                      <Plus className="h-4 w-4 text-brand-orange" />
+                      <Plus className="h-4 w-4 text-brand-orange" aria-hidden />
                     )}
                   </motion.div>
                 </div>
@@ -462,6 +466,7 @@ function FAQ() {
                   {isOpen && (
                     <motion.div
                       key="content"
+                      id={panelId}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -476,7 +481,24 @@ function FAQ() {
             );
           })}
         </div>
+
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          Looking for more depth? Read our{" "}
+          <Link to="/knowledge" className="font-semibold text-brand-orange hover:underline">
+            Knowledge Centre
+          </Link>
+          , browse{" "}
+          <Link to="/industries" className="font-semibold text-brand-orange hover:underline">
+            industry solutions
+          </Link>{" "}
+          or see recent{" "}
+          <Link to="/case-studies" className="font-semibold text-brand-orange hover:underline">
+            case studies
+          </Link>
+          .
+        </p>
       </div>
+
     </section>
   );
 }
