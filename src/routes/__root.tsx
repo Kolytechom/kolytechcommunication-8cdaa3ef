@@ -19,27 +19,50 @@ import { MobileContactBar } from "../components/mobile-contact-bar";
 import { KolyAssistProvider } from "../components/kolyassist";
 import { organizationSchema, websiteSchema, ldScript } from "../lib/seo";
 
+const NOT_FOUND_LINKS = [
+  { to: "/services", label: "Our services" },
+  { to: "/knowledge", label: "Knowledge Centre" },
+  { to: "/industries", label: "Industry solutions" },
+  { to: "/case-studies", label: "Case studies" },
+  { to: "/contact", label: "Contact us" },
+];
+
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="flex min-h-screen items-center justify-center bg-background px-6 py-20">
+      <div className="max-w-lg text-center">
+        <span className="pill bg-orange-gradient text-white">404</span>
+        <h1 className="mt-5 text-3xl sm:text-4xl font-black tracking-tight text-primary">
+          We couldn't find that page.
+        </h1>
+        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+          The page may have moved or never existed. Here are the places most visitors
+          are looking for.
         </p>
+        <div className="mt-7 flex flex-wrap justify-center gap-2">
+          {NOT_FOUND_LINKS.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="btn-press inline-flex items-center justify-center rounded-full glass px-4 py-2 text-sm font-semibold text-primary"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="btn-press inline-flex items-center justify-center rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white"
           >
-            Go home
+            Back to homepage
           </Link>
         </div>
       </div>
     </div>
   );
 }
+
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);

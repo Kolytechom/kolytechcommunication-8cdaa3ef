@@ -197,81 +197,99 @@ export type ReportBlock =
 
 export function reportBlocks(p: ReportPayload): ReportBlock[] {
   const b: ReportBlock[] = [];
-  b.push({ kind: "h1", text: "Technology Consultation Report" });
-  b.push({
-    kind: "p",
-    text: `Kolytech Communication · IT Infrastructure, AI & Digital Solutions · Lagos, Nigeria`,
-  });
-  b.push({
-    kind: "p",
-    text: `Reference ${p.reference} · Issued ${p.date}`,
-  });
+  const { ctx, rec } = p;
 
-  b.push({ kind: "h2", text: "Prepared for" });
+  b.push({ kind: "h1", text: "KolyAssist Technology Consultation Report" });
+  b.push({ kind: "p", text: "Prepared by Kolytech Communication" });
+  b.push({
+    kind: "p",
+    text: "Your Intelligent Business Technology Advisor — IT Infrastructure, AI & Digital Solutions · Lagos, Nigeria",
+  });
+  b.push({ kind: "p", text: `Reference ${p.reference} · Issued ${p.date}` });
+
+  b.push({ kind: "h2", text: "Client Information" });
   b.push({
     kind: "bullets",
     items: [
-      `Name: ${p.contact.name || "—"}`,
-      `Organisation: ${p.contact.company || "—"}`,
-      `Email: ${p.contact.email || "—"}`,
-      `Phone: ${p.contact.phone || "—"}`,
-      `Sector: ${p.rec.industry.label}`,
+      `Name: ${p.contact.name || "Not provided"}`,
+      `Organisation: ${p.contact.company || "Not provided"}`,
+      `Email: ${p.contact.email || "Not provided"}`,
+      `Phone: ${p.contact.phone || "Not provided"}`,
+      `Sector: ${rec.industry.label}`,
     ],
   });
 
-  b.push({ kind: "h2", text: "Executive summary" });
-  b.push({ kind: "p", text: p.rec.advisorNote });
+  b.push({ kind: "h2", text: "Executive Summary" });
+  b.push({ kind: "p", text: rec.advisorNote });
   b.push({
     kind: "p",
-    text: `Areas raised: ${p.ctx.needs.map(labelForNeed).join(", ") || "—"}.`,
+    text: `Areas raised in this consultation: ${ctx.needs.map(labelForNeed).join(", ") || "Not specified"}.`,
   });
 
-  b.push({ kind: "h2", text: "Readiness dashboard" });
+  b.push({ kind: "h2", text: "Executive Readiness Assessment" });
   b.push({
     kind: "bullets",
     items: p.dashboard.map((m) => `${m.label}: ${m.value}% — ${m.caption}`),
   });
 
-  b.push({ kind: "h2", text: "Recommended solutions" });
+  b.push({ kind: "h2", text: "Current Situation" });
   b.push({
     kind: "bullets",
-    items: p.rec.solutions.map((s) => `${s.title} — ${s.short}`),
+    items: [
+      `Operating footprint: ${ctx.scale ? labelForAnswer("scale", ctx.scale) : "Not specified"}`,
+      `Digital maturity: ${ctx.maturity ? labelForAnswer("maturity", ctx.maturity) : "Not specified"}`,
+      `Project driver: ${ctx.driver ? labelForAnswer("driver", ctx.driver) : "Not specified"}`,
+      `Budget position: ${ctx.budget ? labelForAnswer("budget", ctx.budget) : "To be confirmed"}`,
+      `Preferred timeline: ${ctx.timeline ? labelForAnswer("timeline", ctx.timeline) : "Not specified"}`,
+    ],
   });
 
-  b.push({ kind: "h2", text: "Why this fits your organisation" });
-  b.push({ kind: "bullets", items: p.rec.rationale });
-
-  b.push({ kind: "h2", text: "Expected business benefits" });
-  b.push({ kind: "bullets", items: p.rec.benefits });
-
-  b.push({ kind: "h2", text: "Implementation roadmap" });
+  b.push({ kind: "h2", text: "Business Objectives" });
   b.push({
     kind: "bullets",
-    items: p.rec.order.map((o) => `${o.phase}: ${o.service.title} — ${o.note}`),
+    items: ctx.objectives.length
+      ? ctx.objectives.map((o) => labelForAnswer("objective", o))
+      : ["To be confirmed during the site assessment."],
   });
 
-  b.push({ kind: "h2", text: "Estimated timeline" });
-  b.push({ kind: "p", text: p.rec.estimate });
+  b.push({ kind: "h2", text: "Recommended Technology Solutions" });
+  b.push({
+    kind: "bullets",
+    items: rec.solutions.map((s) => `${s.title} — ${s.short}`),
+  });
+  b.push({ kind: "p", text: "Why this fits your organisation:" });
+  b.push({ kind: "bullets", items: rec.rationale });
 
-  b.push({ kind: "h2", text: "Investment guidance" });
+  b.push({ kind: "h2", text: "Expected Business Outcomes" });
+  b.push({ kind: "bullets", items: [...rec.benefits, ...p.value] });
+
+  b.push({ kind: "h2", text: "Implementation Roadmap" });
+  b.push({
+    kind: "bullets",
+    items: rec.order.map((o) => `${o.phase}: ${o.service.title} — ${o.note}`),
+  });
+
+  b.push({ kind: "h2", text: "Estimated Timeline" });
+  b.push({ kind: "p", text: rec.estimate });
+
+  b.push({ kind: "h2", text: "Investment Guidance" });
   b.push({ kind: "p", text: p.investment });
 
-  b.push({ kind: "h2", text: "Projected value" });
-  b.push({ kind: "bullets", items: p.value });
+  b.push({ kind: "h2", text: "Complementary Services" });
+  b.push({ kind: "bullets", items: rec.complementary });
 
-  b.push({ kind: "h2", text: "Complementary services" });
-  b.push({ kind: "bullets", items: p.rec.complementary });
-
-  b.push({ kind: "h2", text: "What happens next" });
+  b.push({ kind: "h2", text: "Recommended Next Steps" });
+  b.push({ kind: "p", text: rec.nextStep });
   b.push({
     kind: "bullets",
     items: NEXT_ACTIONS.map((a, i) => `${i + 1}. ${a.title} — ${a.body}`),
   });
 
-  b.push({ kind: "h2", text: "Contact Kolytech Communication" });
+  b.push({ kind: "h2", text: "Contact Information" });
   b.push({
     kind: "bullets",
     items: [
+      "Kolytech Communication",
       "Phone: +234 813 913 5880",
       "Email: kolytechcom@yahoo.com",
       "Location: Lagos, Nigeria",
@@ -296,6 +314,7 @@ export function reportText(p: ReportPayload): string {
     })
     .join("\n");
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*  Continuation channels — all derived from the same ReportPayload            */
@@ -368,11 +387,37 @@ export function emailSubject(p: ReportPayload): string {
   return `KolyAssist Consultation Report - ${p.reference}`;
 }
 
-/** mailto fallback — trimmed so it stays inside client mail-client URL limits. */
-export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
-  const body = reportText(p).slice(0, 1800);
-  return `mailto:${to}?subject=${encodeURIComponent(emailSubject(p))}&body=${encodeURIComponent(body)}`;
+/**
+ * Mail clients silently truncate long mailto URLs, which used to cut a percent
+ * escape in half and surface artifacts like "%2%7" or "%2\uFFFD" in the body.
+ * We therefore build the text first, trim it on whole *lines* (never inside a
+ * character), and percent-encode exactly once at the end.
+ */
+const MAILTO_ENCODED_BUDGET = 1800;
+
+export function emailBody(p: ReportPayload, budget = MAILTO_ENCODED_BUDGET): string {
+  const lines = reportText(p).split("\n");
+  const kept: string[] = [];
+  let used = 0;
+  for (const line of lines) {
+    const cost = encodeURIComponent(`${line}\n`).length;
+    if (used + cost > budget) {
+      kept.push("", "[Full report attached via the downloadable PDF/Word export.]");
+      break;
+    }
+    kept.push(line);
+    used += cost;
+  }
+  return kept.join("\n");
 }
+
+/** mailto — the body is encoded exactly once, on a safe line boundary. */
+export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
+  const subject = encodeURIComponent(emailSubject(p));
+  const body = encodeURIComponent(emailBody(p));
+  return `mailto:${to}?subject=${subject}&body=${body}`;
+}
+
 
 /** Proposal-ready payload — the same canonical object, flattened for handoff. */
 export function proposalPayload(p: ReportPayload) {
