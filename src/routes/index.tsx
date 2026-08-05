@@ -524,21 +524,27 @@ function CTA() {
                 AI Solutions, Business Automation, CCTV, Healthcare IT, Web & Software
                 Development, and Solar Power Solutions.
               </p>
+              <p className="mt-3 text-sm text-muted-foreground max-w-lg">
+                Not sure where to start? KolyAssist walks you through a short consultation
+                and produces a costed direction you can share internally.
+              </p>
             </div>
             <div className="flex flex-col gap-3">
-              <a
-                href="tel:+2348139135880"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white"
-              >
-                <Phone className="h-4 w-4" /> +234 813 913 5880
-              </a>
+              <KolyAssistCTA variant="primary" label="✨ Launch KolyAssist" />
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-gradient px-6 py-3 text-sm font-semibold text-white"
+                className="btn-press inline-flex items-center justify-center gap-2 rounded-full bg-blue-gradient px-6 py-3 text-sm font-semibold text-white"
               >
-                Send us a message
+                Book a consultation
               </Link>
+              <a
+                href="tel:+2348139135880"
+                className="btn-press inline-flex items-center justify-center gap-2 rounded-full glass px-6 py-3 text-sm font-semibold text-primary"
+              >
+                <Phone className="h-4 w-4 text-brand-orange" /> +234 813 913 5880
+              </a>
             </div>
+
           </div>
         </div>
       </div>
