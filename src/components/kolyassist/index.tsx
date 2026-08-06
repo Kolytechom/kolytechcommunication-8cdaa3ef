@@ -674,24 +674,36 @@ function KolyAssistPanel() {
                           </ul>
                         </ResultBlock>
 
-                        <ResultBlock title="Suggested implementation order">
+                        <ResultBlock title="Integrated implementation roadmap">
                           <ol className="grid gap-2">
-                            {recommendation.order.map((o) => (
+                            {(report?.intel.roadmap ??
+                              recommendation.order.map((o) => ({
+                                phase: o.phase,
+                                title: o.service.title,
+                                note: o.note,
+                                dependencies: [] as string[],
+                              }))).map((o) => (
                               <li
-                                key={o.service.slug}
+                                key={o.phase}
                                 className="rounded-2xl border border-border bg-card p-3.5"
                               >
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-orange">
                                   {o.phase}
                                 </p>
                                 <p className="mt-1 text-sm font-semibold text-foreground">
-                                  {o.service.title}
+                                  {o.title}
                                 </p>
                                 <p className="mt-0.5 text-xs text-muted-foreground">{o.note}</p>
+                                {o.dependencies.length > 0 && (
+                                  <p className="mt-1.5 text-[11px] text-muted-foreground">
+                                    Depends on: {o.dependencies.join(", ")}
+                                  </p>
+                                )}
                               </li>
                             ))}
                           </ol>
                         </ResultBlock>
+
 
                         <ResultBlock title="Complementary services">
                           <div className="flex flex-wrap gap-2">
