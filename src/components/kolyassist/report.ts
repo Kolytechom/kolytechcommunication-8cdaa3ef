@@ -205,113 +205,129 @@ export type ReportBlock =
   | { kind: "p"; text: string }
   | { kind: "bullets"; items: string[] };
 
+/**
+ * Adaptive report composer — sections are emitted only when the consultation
+ * produced evidence for them. Every value comes from ConsultationIntelligence.
+ */
 export function reportBlocks(p: ReportPayload): ReportBlock[] {
   const b: ReportBlock[] = [];
-  const { ctx, rec } = p;
+  const { rec, intel } = p;
+  const { intent, executiveSummary: es } = intel;
+
+  const h2 = (text: string) => b.push({ kind: "h2", text });
+  const para = (text: string) => b.push({ kind: "p", text });
+  const bullets = (items: string[]) => {
+    const clean = items.filter(Boolean);
+    if (clean.length) b.push({ kind: "bullets", items: clean });
+  };
+  const section = (title: string, items: string[]) => {
+    const clean = items.filter(Boolean);
+    if (!clean.length) return;
+    h2(title);
+    bullets(clean);
+  };
 
   b.push({ kind: "h1", text: "KolyAssist Technology Consultation Report" });
-  b.push({ kind: "p", text: "Prepared by Kolytech Communication" });
-  b.push({
-    kind: "p",
-    text: "Your Intelligent Business Technology Advisor — IT Infrastructure, AI & Digital Solutions · Lagos, Nigeria",
-  });
-  b.push({ kind: "p", text: `Reference ${p.reference} · Issued ${p.date}` });
+  para("Prepared by Kolytech Communication");
+  para(
+    "Your Intelligent Business Technology Advisor — IT Infrastructure, AI & Digital Solutions · Lagos, Nigeria",
+  );
+  para(`Reference ${p.reference} · Issued ${p.date}`);
 
-  b.push({ kind: "h2", text: "Client Information" });
-  b.push({
-    kind: "bullets",
-    items: [
-      `Name: ${p.contact.name || "Not provided"}`,
-      `Organisation: ${p.contact.company || "Not provided"}`,
-      `Email: ${p.contact.email || "Not provided"}`,
-      `Phone: ${p.contact.phone || "Not provided"}`,
-      `Sector: ${rec.industry.label}`,
-    ],
-  });
+  section("Client Information", [
+    p.contact.name ? `Name: ${p.contact.name}` : "",
+    p.contact.company ? `Organisation: ${p.contact.company}` : "",
+    p.contact.email ? `Email: ${p.contact.email}` : "",
+    p.contact.phone ? `Phone: ${p.contact.phone}` : "",
+    `Sector: ${intent.industry}`,
+  ]);
 
-  b.push({ kind: "h2", text: "Executive Summary" });
-  b.push({ kind: "p", text: rec.advisorNote });
-  b.push({
-    kind: "p",
-    text: `Areas raised in this consultation: ${ctx.needs.map(labelForNeed).join(", ") || "Not specified"}.`,
-  });
+  h2("Executive Summary");
+  para(es.situation);
+  para(es.challenge);
+  para(es.strategy);
+  para(es.value);
+  para(`Recommended next action: ${es.nextAction}`);
 
-  b.push({ kind: "h2", text: "Executive Readiness Assessment" });
-  b.push({
-    kind: "bullets",
-    items: p.dashboard.map((m) => `${m.label}: ${m.value}% — ${m.caption}`),
-  });
+  section("Business Context", [
+    intent.organisation ? `Organisation type: ${intent.organisation}` : "",
+    intent.scale ? `Operating footprint: ${intent.scale}` : "",
+    intent.driver ? `Project driver: ${intent.driver}` : "",
+    intent.timeline ? `Preferred timeline: ${intent.timeline}` : "",
+    intent.budget ? `Budget position: ${intent.budget}` : "",
+  ]);
 
-  b.push({ kind: "h2", text: "Current Situation" });
-  b.push({
-    kind: "bullets",
-    items: [
-      `Operating footprint: ${ctx.scale ? labelForAnswer("scale", ctx.scale) : "Not specified"}`,
-      `Digital maturity: ${ctx.maturity ? labelForAnswer("maturity", ctx.maturity) : "Not specified"}`,
-      `Project driver: ${ctx.driver ? labelForAnswer("driver", ctx.driver) : "Not specified"}`,
-      `Budget position: ${ctx.budget ? labelForAnswer("budget", ctx.budget) : "To be confirmed"}`,
-      `Preferred timeline: ${ctx.timeline ? labelForAnswer("timeline", ctx.timeline) : "Not specified"}`,
-    ],
-  });
+  if (intent.maturity) {
+    h2("Current Situation");
+    para(`Current digital maturity: ${intent.maturity}.`);
+  }
 
-  b.push({ kind: "h2", text: "Business Objectives" });
-  b.push({
-    kind: "bullets",
-    items: ctx.objectives.length
-      ? ctx.objectives.map((o) => labelForAnswer("objective", o))
-      : ["To be confirmed during the site assessment."],
-  });
+  section(
+    "Business Objectives",
+    p.ctx.objectives.map((o) => labelForAnswer("objective", o)),
+  );
 
-  b.push({ kind: "h2", text: "Recommended Technology Solutions" });
-  b.push({
-    kind: "bullets",
-    items: rec.solutions.map((s) => `${s.title} — ${s.short}`),
-  });
-  b.push({ kind: "p", text: "Why this fits your organisation:" });
-  b.push({ kind: "bullets", items: rec.rationale });
+  h2("Industry Considerations");
+  para(rec.industry.language);
 
-  b.push({ kind: "h2", text: "Expected Business Outcomes" });
-  b.push({ kind: "bullets", items: [...rec.benefits, ...p.value] });
+  h2("Executive Readiness Assessment");
+  bullets(p.dashboard.map((m) => `${m.label}: ${m.value}% — ${m.caption}`));
 
-  b.push({ kind: "h2", text: "Implementation Roadmap" });
-  b.push({
-    kind: "bullets",
-    items: rec.order.map((o) => `${o.phase}: ${o.service.title} — ${o.note}`),
-  });
+  h2("Recommended Technology Solutions");
+  bullets(intel.graded.map((g) => `[${g.priority}] ${g.title} — ${g.summary}`));
 
-  b.push({ kind: "h2", text: "Estimated Timeline" });
-  b.push({ kind: "p", text: rec.estimate });
+  section(
+    "Why These Recommendations",
+    intel.graded.map((g) => `${g.title}: ${g.why}`),
+  );
 
-  b.push({ kind: "h2", text: "Investment Guidance" });
-  b.push({ kind: "p", text: p.investment });
+  section(
+    "Implementation Roadmap",
+    intel.roadmap.map(
+      (r) =>
+        `${r.phase}: ${r.title} — ${r.note}${r.dependencies.length ? ` (Depends on: ${r.dependencies.join(", ")})` : ""}`,
+    ),
+  );
 
-  b.push({ kind: "h2", text: "Complementary Services" });
-  b.push({ kind: "bullets", items: rec.complementary });
+  h2("Project Complexity");
+  bullets([
+    `Complexity: ${intel.complexity.level}`,
+    `Estimated duration: ${intel.complexity.duration}`,
+    `Delivery approach: ${intel.complexity.approach}`,
+    `Expected operational disruption: ${intel.complexity.disruption}`,
+  ]);
 
-  b.push({ kind: "h2", text: "Recommended Next Steps" });
-  b.push({ kind: "p", text: rec.nextStep });
-  b.push({
-    kind: "bullets",
-    items: NEXT_ACTIONS.map((a, i) => `${i + 1}. ${a.title} — ${a.body}`),
-  });
+  section("Expected Business Outcomes", intel.outcomes);
+  section("Risks & Assumptions", [...intel.risks, ...intel.assumptions]);
+  section("Immediate Actions", intel.actions);
 
-  b.push({ kind: "h2", text: "Contact Information" });
-  b.push({
-    kind: "bullets",
-    items: [
-      "Kolytech Communication",
-      "Phone: +234 813 913 5880",
-      "Email: kolytechcom@yahoo.com",
-      "Location: Lagos, Nigeria",
-    ],
-  });
-  b.push({
-    kind: "p",
-    text: "This report is an advisory summary generated by KolyAssist. Final scope, timeline and pricing are confirmed after an on-site assessment.",
-  });
+  if (intel.discoveryGaps.length) {
+    h2("Information Recommended for Discovery");
+    para(DISCOVERY_NOTE);
+    bullets(intel.discoveryGaps);
+  }
+
+  h2("Investment Guidance");
+  para(p.investment);
+
+  h2("Recommended Next Steps");
+  para(rec.nextStep);
+  bullets(NEXT_ACTIONS.map((a, i) => `${i + 1}. ${a.title} — ${a.body}`));
+
+  h2("Contact Information");
+  bullets([
+    "Kolytech Communication",
+    "Phone: +234 813 913 5880",
+    "Email: kolytechcom@yahoo.com",
+    "Location: Lagos, Nigeria",
+  ]);
+  para(
+    "This report is an advisory summary generated by KolyAssist. Final scope, timeline and pricing are confirmed after an on-site assessment.",
+  );
 
   return b;
 }
+
 
 /** Plain-text version used for email, WhatsApp and the contact-form handoff. */
 export function reportText(p: ReportPayload): string {
