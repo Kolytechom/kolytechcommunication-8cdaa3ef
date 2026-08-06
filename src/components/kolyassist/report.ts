@@ -378,32 +378,45 @@ export function profileLines(p: ReportPayload): string[] {
 
 /** Professional WhatsApp handoff carrying the full consultation. */
 export function whatsappMessage(p: ReportPayload): string {
+  const { intel } = p;
   const sections = [
     "*KolyAssist Consultation Summary*",
     "Kolytech Communication — IT Infrastructure, AI & Digital Solutions",
     "",
     profileLines(p).join("\n"),
     "",
-    "*Recommended solutions*",
-    p.rec.solutions.map((s) => `• ${s.title} — ${s.short}`).join("\n"),
+    "*Executive summary*",
+    [
+      intel.executiveSummary.situation,
+      intel.executiveSummary.challenge,
+      intel.executiveSummary.strategy,
+    ].join(" "),
     "",
-    `*Confidence score:* ${p.rec.confidenceScore}%`,
+    "*Recommended solutions*",
+    intel.graded.map((g) => `• [${g.priority}] ${g.title} — ${g.summary}`).join("\n"),
+    "",
+    `*Consultation completeness:* ${intel.completeness.score}%`,
+    `*Project complexity:* ${intel.complexity.level}`,
+    "",
+    "*Implementation roadmap*",
+    intel.roadmap.map((r) => `• ${r.phase}: ${r.title}`).join("\n"),
+    "",
+    "*Expected business outcomes*",
+    intel.outcomes.map((v) => `• ${v}`).join("\n"),
+    "",
+    "*Immediate actions*",
+    intel.actions.map((v) => `• ${v}`).join("\n"),
     "",
     "*Investment guidance*",
     p.investment,
     "",
-    "*Business value projection*",
-    p.value.map((v) => `• ${v}`).join("\n"),
+    `*Estimated timeline:* ${intel.complexity.duration}`,
     "",
-    "*Implementation roadmap*",
-    p.rec.order.map((o) => `• ${o.phase}: ${o.service.title}`).join("\n"),
-    "",
-    `*Estimated timeline:* ${p.rec.estimate}`,
-    "",
-    `*Recommended next action:* ${p.rec.nextStep}`,
+    `*Recommended next action:* ${intel.executiveSummary.nextAction}`,
   ];
   return sections.join("\n");
 }
+
 
 export function whatsappUrl(p: ReportPayload): string {
   return `https://wa.me/2348139135880?text=${encodeURIComponent(whatsappMessage(p))}`;
