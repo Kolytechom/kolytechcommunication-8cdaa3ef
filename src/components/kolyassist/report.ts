@@ -164,6 +164,8 @@ export type ReportPayload = {
   dashboard: DashboardMetric[];
   investment: string;
   value: string[];
+  /** Canonical business intelligence — every channel reads from here. */
+  intel: ConsultationIntelligence;
 };
 
 export function buildPayload(
@@ -185,8 +187,10 @@ export function buildPayload(
     dashboard: buildDashboard(ctx, rec),
     investment: investmentGuidance(ctx, rec),
     value: valueProjection(rec),
+    intel: buildIntelligence(ctx, rec),
   };
 }
+
 
 /** Ordered, renderer-agnostic report body. */
 export type ReportBlock =
