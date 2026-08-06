@@ -460,21 +460,30 @@ export function mailtoUrl(p: ReportPayload, to = CONTACT_EMAIL): string {
 
 /** Proposal-ready payload — the same canonical object, flattened for handoff. */
 export function proposalPayload(p: ReportPayload) {
+  const { intel } = p;
   return {
     reference: p.reference,
     issued: p.date,
     client: p.contact,
-    industry: p.rec.industry.label,
+    industry: intel.intent.industry,
     objectives: p.ctx.objectives.map((o) => labelForAnswer("objective", o)),
-    selectedServices: p.ctx.needs.map(labelForNeed),
-    recommendations: p.rec.solutions.map((s) => ({ title: s.title, summary: s.short })),
-    roadmap: p.rec.order.map((o) => ({ phase: o.phase, service: o.service.title, note: o.note })),
+    selectedServices: intel.intent.services,
+    executiveSummary: intel.executiveSummary,
+    recommendations: intel.graded,
+    dependencies: intel.dependencies,
+    roadmap: intel.roadmap,
+    complexity: intel.complexity,
+    outcomes: intel.outcomes,
+    risks: intel.risks,
+    assumptions: intel.assumptions,
+    immediateActions: intel.actions,
+    discoveryGaps: intel.discoveryGaps,
     investment: p.investment,
-    valueProjection: p.value,
-    timeline: p.rec.estimate,
-    confidenceScore: p.rec.confidenceScore,
+    timeline: intel.complexity.duration,
+    completeness: intel.completeness,
   };
 }
+
 
 /** Stored so /contact can pre-fill with consultation context. */
 export function saveHandoff(p: ReportPayload, intent: HandoffIntent = "enquiry") {
