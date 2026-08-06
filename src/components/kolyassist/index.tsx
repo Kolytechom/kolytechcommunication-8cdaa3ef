@@ -572,9 +572,19 @@ function KolyAssistPanel() {
                             {recommendation.industry.label.toLowerCase()} technology plan.
                           </span>
                         </h3>
-                        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                          {recommendation.advisorNote}
-                        </p>
+                        {report ? (
+                          <div className="mt-3 grid gap-2 text-sm text-muted-foreground leading-relaxed">
+                            <p>{report.intel.executiveSummary.situation}</p>
+                            <p>{report.intel.executiveSummary.challenge}</p>
+                            <p>{report.intel.executiveSummary.strategy}</p>
+                            <p>{report.intel.executiveSummary.value}</p>
+                          </div>
+                        ) : (
+                          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                            {recommendation.advisorNote}
+                          </p>
+                        )}
+
 
                         {/* Confidence indicator */}
                         <div className="mt-5 rounded-2xl border border-border bg-card p-4">
