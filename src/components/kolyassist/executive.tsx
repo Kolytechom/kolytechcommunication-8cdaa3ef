@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Download, FileText, Loader2 } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { NEXT_ACTIONS, reportBlocks, type ReportPayload } from "./report";
+import { DISCOVERY_NOTE } from "./consultation-intelligence";
+
 
 
 function download(blob: Blob, filename: string) {
