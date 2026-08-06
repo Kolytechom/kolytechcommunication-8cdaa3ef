@@ -624,11 +624,27 @@ function KolyAssistPanel() {
                                       <Icon className="h-4.5 w-4.5" />
                                     </span>
                                     <div>
-                                      <h4 className="text-sm font-bold text-primary">{s.title}</h4>
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <h4 className="text-sm font-bold text-primary">{s.title}</h4>
+                                        {report?.intel.graded[i] && (
+                                          <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-orange">
+                                            {report.intel.graded[i].priority.replace(
+                                              " Recommendation",
+                                              "",
+                                            )}
+                                          </span>
+                                        )}
+                                      </div>
                                       <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
                                         {s.short}
                                       </p>
+                                      {report?.intel.graded[i] && (
+                                        <p className="mt-1.5 text-[11px] text-muted-foreground/90 leading-relaxed">
+                                          {report.intel.graded[i].why}
+                                        </p>
+                                      )}
                                     </div>
+
                                   </div>
                                 </motion.div>
                               );
