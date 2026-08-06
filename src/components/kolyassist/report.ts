@@ -4,7 +4,13 @@
  * PDF/DOCX exports and the contact-form handoff.
  */
 import type { Recommendation, ConsultationContext } from "./intelligence";
+import {
+  buildIntelligence,
+  DISCOVERY_NOTE,
+  type ConsultationIntelligence,
+} from "./consultation-intelligence";
 import { labelForNeed, labelForAnswer } from "./data";
+
 
 export const HANDOFF_KEY = "kolyassist_handoff_v1";
 const REFERENCE_KEY = "kolyassist_reference_v1";
