@@ -572,9 +572,19 @@ function KolyAssistPanel() {
                             {recommendation.industry.label.toLowerCase()} technology plan.
                           </span>
                         </h3>
-                        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                          {recommendation.advisorNote}
-                        </p>
+                        {report ? (
+                          <div className="mt-3 grid gap-2 text-sm text-muted-foreground leading-relaxed">
+                            <p>{report.intel.executiveSummary.situation}</p>
+                            <p>{report.intel.executiveSummary.challenge}</p>
+                            <p>{report.intel.executiveSummary.strategy}</p>
+                            <p>{report.intel.executiveSummary.value}</p>
+                          </div>
+                        ) : (
+                          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                            {recommendation.advisorNote}
+                          </p>
+                        )}
+
 
                         {/* Confidence indicator */}
                         <div className="mt-5 rounded-2xl border border-border bg-card p-4">
@@ -614,11 +624,27 @@ function KolyAssistPanel() {
                                       <Icon className="h-4.5 w-4.5" />
                                     </span>
                                     <div>
-                                      <h4 className="text-sm font-bold text-primary">{s.title}</h4>
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <h4 className="text-sm font-bold text-primary">{s.title}</h4>
+                                        {report?.intel.graded[i] && (
+                                          <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-orange">
+                                            {report.intel.graded[i].priority.replace(
+                                              " Recommendation",
+                                              "",
+                                            )}
+                                          </span>
+                                        )}
+                                      </div>
                                       <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
                                         {s.short}
                                       </p>
+                                      {report?.intel.graded[i] && (
+                                        <p className="mt-1.5 text-[11px] text-muted-foreground/90 leading-relaxed">
+                                          {report.intel.graded[i].why}
+                                        </p>
+                                      )}
                                     </div>
+
                                   </div>
                                 </motion.div>
                               );
@@ -648,24 +674,36 @@ function KolyAssistPanel() {
                           </ul>
                         </ResultBlock>
 
-                        <ResultBlock title="Suggested implementation order">
+                        <ResultBlock title="Integrated implementation roadmap">
                           <ol className="grid gap-2">
-                            {recommendation.order.map((o) => (
+                            {(report?.intel.roadmap ??
+                              recommendation.order.map((o) => ({
+                                phase: o.phase,
+                                title: o.service.title,
+                                note: o.note,
+                                dependencies: [] as string[],
+                              }))).map((o) => (
                               <li
-                                key={o.service.slug}
+                                key={o.phase}
                                 className="rounded-2xl border border-border bg-card p-3.5"
                               >
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-orange">
                                   {o.phase}
                                 </p>
                                 <p className="mt-1 text-sm font-semibold text-foreground">
-                                  {o.service.title}
+                                  {o.title}
                                 </p>
                                 <p className="mt-0.5 text-xs text-muted-foreground">{o.note}</p>
+                                {o.dependencies.length > 0 && (
+                                  <p className="mt-1.5 text-[11px] text-muted-foreground">
+                                    Depends on: {o.dependencies.join(", ")}
+                                  </p>
+                                )}
                               </li>
                             ))}
                           </ol>
                         </ResultBlock>
+
 
                         <ResultBlock title="Complementary services">
                           <div className="flex flex-wrap gap-2">

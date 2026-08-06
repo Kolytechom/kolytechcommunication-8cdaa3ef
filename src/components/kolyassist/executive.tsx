@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Download, FileText, Loader2 } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { NEXT_ACTIONS, reportBlocks, type ReportPayload } from "./report";
+import { DISCOVERY_NOTE } from "./consultation-intelligence";
+
 
 
 function download(blob: Blob, filename: string) {
@@ -187,9 +189,9 @@ export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
         </p>
       </Block>
 
-      <Block title="Projected value">
+      <Block title="Expected business outcomes">
         <ul className="grid gap-2">
-          {payload.value.map((v) => (
+          {payload.intel.outcomes.map((v) => (
             <li key={v} className="flex items-start gap-2 text-sm text-muted-foreground">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange" />
               {v}
@@ -197,6 +199,65 @@ export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
           ))}
         </ul>
       </Block>
+
+      <Block title="Project complexity">
+        <div className="grid gap-2 rounded-2xl border border-border bg-card p-3.5 text-sm text-muted-foreground">
+          <p>
+            <span className="font-semibold text-foreground">Complexity:</span>{" "}
+            {payload.intel.complexity.level}
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Estimated duration:</span>{" "}
+            {payload.intel.complexity.duration}
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Delivery approach:</span>{" "}
+            {payload.intel.complexity.approach}
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Operational disruption:</span>{" "}
+            {payload.intel.complexity.disruption}
+          </p>
+        </div>
+      </Block>
+
+      <Block title="Risks & assumptions">
+        <ul className="grid gap-2">
+          {[...payload.intel.risks, ...payload.intel.assumptions].map((v) => (
+            <li key={v} className="flex items-start gap-2 text-sm text-muted-foreground">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange" />
+              {v}
+            </li>
+          ))}
+        </ul>
+      </Block>
+
+      <Block title="Immediate actions">
+        <ul className="grid gap-2">
+          {payload.intel.actions.map((v) => (
+            <li key={v} className="flex items-start gap-2 text-sm text-muted-foreground">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange" />
+              {v}
+            </li>
+          ))}
+        </ul>
+      </Block>
+
+      {payload.intel.discoveryGaps.length > 0 && (
+        <Block title="Information recommended for discovery">
+          <div className="rounded-2xl border border-border bg-card p-3.5">
+            <p className="text-xs text-muted-foreground">{DISCOVERY_NOTE}</p>
+            <ul className="mt-2 grid gap-1.5">
+              {payload.intel.discoveryGaps.map((v) => (
+                <li key={v} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange" />
+                  {v}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Block>
+      )}
 
       <Block title="What happens next">
         <ol className="grid gap-2">
@@ -211,6 +272,7 @@ export function ExecutiveSummary({ payload }: { payload: ReportPayload }) {
           ))}
         </ol>
       </Block>
+
 
       <Block title="Take your report with you">
         <div className="grid gap-2 sm:grid-cols-2">
